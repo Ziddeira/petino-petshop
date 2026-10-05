@@ -6,11 +6,11 @@ HTML, CSS e JavaScript puros: não precisa de build nem de dependências.
 ```
 petino-petshop/
 ├── index.html          ← página
-├── styles.css          ← todo o visual (tema azul-claro + verde-limão da marca)
+├── styles.css          ← todo o visual (temas azul-marinho e azul-claro + verde-limão da marca)
 ├── script.js           ← configuração, interações, bolhas do cursor e animação de scroll
-├── frames/             ← 300 frames do vídeo (540×960, WebP com fundo transparente)
+├── frames/             ← 300 frames do vídeo (569×1190, WebP com fundo transparente, ~11 MB)
 │   ├── frame_0001.webp … frame_0300.webp
-│   └── mobile/         ← os mesmos 300 frames em 288×512 (celular e tablet)
+│   └── mobile/         ← os mesmos 300 frames em 284×595 (celular e tablet, ~7 MB)
 └── assets/img/         ← logo, favicon e imagem de compartilhamento
 ```
 
@@ -30,16 +30,17 @@ Para publicar, envie a pasta inteira para qualquer hospedagem estática
 
 - **Onde ficam os frames:** a pasta `frames/` precisa estar **na mesma pasta do `index.html`**.
   Os nomes seguem o padrão `frame_0001.webp` … `frame_0300.webp`, e `frames/mobile/` tem os mesmos nomes.
-- **Desktop (≥ 1100 px):** a animação fica numa coluna **fixa na lateral direita**. O conteúdo do site
-  deixa espaço para ela, e o frame avança suavemente conforme a página desce
-  (0% de rolagem = frame 1, 100% = frame 300).
+- **Desktop (≥ 1100 px):** a animação fica numa coluna **fixa na lateral direita**, com os pets **bem grandes**:
+  a pilha tem o dobro da altura da tela e a rolagem "desce a câmera" do gato (topo da página) até o golden
+  (fim da página), enquanto os frames avançam (0% de rolagem = frame 1, 100% = frame 300).
+  O tamanho é ajustável em `PETINO.frames.zoom` no `script.js` (`2` = duas telas de altura).
 - **Celular/tablet:** aparece uma mini janela flutuante à direita depois do topo da página.
   Ela usa os frames leves de `frames/mobile/` e pode ser fechada no ×.
 - **Pré-carregamento progressivo:** primeiro carrega frames espaçados e depois preenche os intervalos,
   então a animação já funciona antes de tudo terminar. Uma barrinha verde mostra o progresso.
 - **Canvas responsivo:** fica nítido em telas retina e mantém a proporção do vídeo (9:16, sem distorcer).
-- **`prefers-reduced-motion`:** se o visitante pediu menos movimento, aparece só um frame estático
-  (os outros 299 nem são baixados) e as bolhas do cursor ficam desligadas.
+- **`prefers-reduced-motion`:** se o visitante pediu menos movimento, aparece só um frame estático com a pilha inteira
+  (os outros 299 nem são baixados) e as bolhas ficam desligadas.
 
 Para trocar o vídeo, gere novos frames com o mesmo padrão de nome e ajuste `PETINO.frames`
 no topo do `script.js` (quantidade, pasta, extensão).
@@ -49,7 +50,21 @@ no topo do `script.js` (quantidade, pasta, extensão).
 ffmpeg -i video.mp4 -vf "fps=30,scale=540:-1" -frames:v 300 frames/frame_%04d.webp
 ```
 
-> Os frames atuais tiveram o fundo preto do vídeo removido, para os pets "flutuarem" sobre o fundo do site.
+> Os frames atuais tiveram o fundo preto do vídeo removido (com limpeza das bordas) e foram recortados na área dos pets,
+> para eles "flutuarem" sobre o fundo do site. Se trocar por frames sem recorte, ajuste `crop` e `focusX` no `script.js`.
+
+## Bolhas de sabão
+
+- No computador, poucas bolhas pequenas seguem o cursor.
+- **Clique (ou toque) em qualquer lugar:** uma bolha enche no ponteiro e estoura em gotinhas.
+  Bolhas do rastro perto do clique também estouram.
+
+## Cor de fundo (azul-marinho ou azul-claro)
+
+O site abre em **azul-marinho**. O botão **"Fundo"** no cabeçalho troca para azul-claro, e a escolha fica salva no navegador.
+Também dá para forçar pela URL: `?tema=claro` ou `?tema=marinho`.
+Para definir o padrão, mude `data-theme="navy"` (ou `"light"`) na tag `<html>` do `index.html`.
+Se decidirem por um só, é só remover o botão `.theme-toggle` do cabeçalho.
 
 ## Configuração rápida (topo do `script.js`)
 

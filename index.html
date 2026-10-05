@@ -1,11 +1,22 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="navy">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Petino Petshop | Banho e Tosa, Veterinário e Pet Shop em Palhoça - SC</title>
   <meta name="description" content="Petino Petshop em Nova Palhoça: banho e tosa com sala de vidro, pacote de 5 banhos a partir de R$190, tosa higiênica a partir de R$15, consulta veterinária, farmácia e tudo para cães e gatos. Agende pelo WhatsApp!">
-  <meta name="theme-color" content="#e6f2ff">
+  <meta name="theme-color" content="#010147">
+  <script>
+    /* Tema do fundo: "navy" (azul-marinho, padrão) ou "light" (azul-claro).
+       Também aceita ?tema=claro / ?tema=marinho na URL. Aplicado antes de pintar a página. */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("petino-tema"); } catch (e) {}
+      var q = new URLSearchParams(location.search).get("tema");
+      if (q === "claro") t = "light"; else if (q === "marinho") t = "navy";
+      if (t === "light" || t === "navy") document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
 
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
@@ -81,9 +92,16 @@
         <a href="#agendar" class="btn btn--lime btn--sm nav__cta">Agendar agora</a>
       </nav>
 
-      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="header__actions">
+        <button class="theme-toggle" type="button" aria-pressed="true" title="Trocar a cor de fundo do site">
+          <span class="theme-toggle__swatch theme-toggle__swatch--navy" aria-hidden="true"></span>
+          <span class="theme-toggle__swatch theme-toggle__swatch--light" aria-hidden="true"></span>
+          <span class="theme-toggle__label">Fundo <span class="theme-toggle__name">marinho</span></span>
+        </button>
+        <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </header>
 

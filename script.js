@@ -2,8 +2,8 @@
    Petino Petshop — script.js
    1. Configuração (edite aqui WhatsApp, Instagram etc.)
    2. Links de WhatsApp / mapa / Instagram
-   3. Menu, cabeçalho, animações de entrada, formulário
-   4. Bolhas de sabão no cursor (desktop)
+   3. Tema do fundo, menu, cabeçalho, animações de entrada, formulário
+   4. Bolhas de sabão (rastro no cursor + estouro no clique)
    5. Animação de scroll com sequência de 300 frames
    ========================================================= */
 
@@ -17,11 +17,17 @@ const PETINO = {
   // Sequência de frames do vídeo (veja README.md)
   frames: {
     total: 300,
-    desktopPath: "frames/",          // 540×960 — telas grandes
-    mobilePath: "frames/mobile/",    // 288×512 — celular/tablet
+    desktopPath: "frames/",          // 569×1190 — telas grandes
+    mobilePath: "frames/mobile/",    // 284×595 — celular/tablet
     prefix: "frame_",
     digits: 4,
     ext: ".webp",
+    // Área do frame usada no desenho (frações). Os frames já vêm recortados nos pets.
+    crop: { x: 0, y: 0, w: 1, h: 1 },
+    focusX: 0.443,                   // centro horizontal da pilha de pets no frame
+    // Altura da pilha de pets em "telas": 2 = o dobro da altura visível.
+    // A rolagem desce pela pilha, do gato (topo) até o golden (base).
+    zoom: { desktop: 2, mobile: 1.5 },
   },
 };
 
@@ -72,6 +78,24 @@ const PETINO = {
   });
   $$("a", nav).forEach((a) => a.addEventListener("click", closeMenu));
   document.addEventListener("keydown", (e) => e.key === "Escape" && closeMenu());
+
+  // Troca de fundo: azul-marinho ⇄ azul-claro
+  const themeBtn = $(".theme-toggle");
+  const themeMeta = $('meta[name="theme-color"]');
+  const applyTheme = (t) => {
+    document.documentElement.setAttribute("data-theme", t);
+    const navy = t === "navy";
+    themeBtn.setAttribute("aria-pressed", String(navy));
+    themeBtn.setAttribute("aria-label", navy ? "Fundo azul-marinho ativo. Mudar para azul-claro" : "Fundo azul-claro ativo. Mudar para azul-marinho");
+    $(".theme-toggle__name", themeBtn).textContent = navy ? "marinho" : "claro";
+    if (themeMeta) themeMeta.content = navy ? "#010147" : "#e6f2ff";
+  };
+  applyTheme(document.documentElement.getAttribute("data-theme") === "light" ? "light" : "navy");
+  themeBtn.addEventListener("click", () => {
+    const next = document.documentElement.getAttribute("data-theme") === "navy" ? "light" : "navy";
+    applyTheme(next);
+    try { localStorage.setItem("petino-tema", next); } catch (e) { /* sem storage */ }
+  });
 
   // Sombra no cabeçalho ao rolar
   const header = $(".header");
@@ -150,24 +174,24 @@ const PETINO = {
     });
   }
 
-  /* ---------- 4. Bolhas de sabão no cursor (apenas desktop) ---------- */
+  /* ---------- 4. Bolhas de sabão: rastro no cursor (desktop) + bolha que estoura no clique ---------- */
   (function bubbles() {
     const canvas = $("#bubbles");
-    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!canvas || !finePointer || reducedMotion.matches) {
-      if (canvas) canvas.remove();
-      return;
-    }
+    if (!canvas) return;
+    if (reducedMotion.matches) { canvas.remove(); return; }
 
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const ctx = canvas.getContext("2d");
-    const MAX = 16;          // poucas bolhas na tela
+    const MAX = 16;          // poucas bolhas no rastro
     const MIN_DIST = 46;     // px de movimento entre bolhas
     const MIN_GAP = 80;      // ms entre bolhas
-    const list = [];
-    let dpr = 1, last = { x: 0, y: 0, t: 0 }, running = false;
+    const trail = [];        // bolhas pequenas que seguem o cursor
+    const pops = [];         // bolhas do clique (enchem e estouram)
+    const drops = [];        // gotinhas do estouro
+    let last = { x: 0, y: 0, t: 0 }, running = false;
 
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = innerWidth * dpr;
       canvas.height = innerHeight * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -175,65 +199,125 @@ const PETINO = {
     resize();
     window.addEventListener("resize", resize);
 
-    window.addEventListener("mousemove", (e) => {
+    const start = () => { if (!running) { running = true; requestAnimationFrame(tick); } };
+    const rand = (a, b) => a + Math.random() * (b - a);
+
+    // Rastro discreto no cursor (só mouse)
+    if (finePointer) {
+      window.addEventListener("mousemove", (e) => {
+        const now = performance.now();
+        const dx = e.clientX - last.x, dy = e.clientY - last.y;
+        if (now - last.t < MIN_GAP || dx * dx + dy * dy < MIN_DIST * MIN_DIST || trail.length >= MAX) return;
+        last = { x: e.clientX, y: e.clientY, t: now };
+        trail.push({
+          x: e.clientX + rand(-7, 7), y: e.clientY + rand(-7, 7),
+          r: rand(3, 9), vx: rand(-0.2, 0.2), vy: rand(-0.7, -0.25),
+          phase: rand(0, 6.28), hue: rand(0, 360), born: now, life: rand(1300, 2200),
+        });
+        start();
+      }, { passive: true });
+    }
+
+    // Clique/toque em qualquer lugar: uma bolha enche e estoura no ponteiro
+    function burst(x, y, r, hue) {
+      const n = 9 + Math.floor(r / 3);
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * Math.PI * 2 + rand(-0.2, 0.2);
+        const s = rand(1.6, 3.4);
+        drops.push({ x: x + Math.cos(a) * r, y: y + Math.sin(a) * r, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 0.6,
+          r: rand(1.2, 2.6), hue: (hue + i * 25) % 360, born: performance.now(), life: rand(380, 620) });
+      }
+    }
+    window.addEventListener("pointerdown", (e) => {
+      if (e.button > 0) return;
       const now = performance.now();
-      const dx = e.clientX - last.x, dy = e.clientY - last.y;
-      if (now - last.t < MIN_GAP || dx * dx + dy * dy < MIN_DIST * MIN_DIST || list.length >= MAX) return;
-      last = { x: e.clientX, y: e.clientY, t: now };
-      list.push({
-        x: e.clientX + (Math.random() - 0.5) * 14,
-        y: e.clientY + (Math.random() - 0.5) * 14,
-        r: 3 + Math.random() * 6,               // pequenas
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: -0.25 - Math.random() * 0.45,       // sobem devagar
-        phase: Math.random() * Math.PI * 2,
-        hue: Math.random() * 360,
-        born: now,
-        life: 1300 + Math.random() * 900,
-      });
-      if (!running) { running = true; requestAnimationFrame(tick); }
+      // estoura as bolhas do rastro que estiverem perto do clique
+      for (let i = trail.length - 1; i >= 0; i--) {
+        const b = trail[i];
+        if (Math.hypot(b.x - e.clientX, b.y - e.clientY) < b.r + 40) {
+          burst(b.x, b.y, b.r, b.hue);
+          trail.splice(i, 1);
+        }
+      }
+      pops.push({ x: e.clientX, y: e.clientY, r: rand(16, 24), hue: rand(0, 360), born: now, grow: 150, popped: false });
+      start();
     }, { passive: true });
 
-    function drawBubble(b, t) {
-      const p = t / b.life;                     // 0 → 1
-      const alpha = p < 0.15 ? p / 0.15 : p > 0.85 ? (1 - p) / 0.15 : 1;
-      const r = b.r * (0.6 + 0.4 * Math.min(1, p * 4)) * (p > 0.9 ? 1 + (p - 0.9) * 3 : 1);
-
+    function bubbleBody(x, y, r, hue, t, alpha) {
       ctx.save();
-      ctx.globalAlpha = alpha * 0.9;
-      // corpo transparente com borda iridescente
-      const g = ctx.createRadialGradient(b.x, b.y, r * 0.2, b.x, b.y, r);
-      g.addColorStop(0, "rgba(255,255,255,0.02)");
-      g.addColorStop(0.75, "rgba(255,255,255,0.08)");
-      g.addColorStop(1, `hsla(${(b.hue + t * 0.12) % 360}, 90%, 72%, 0.45)`);
+      ctx.globalAlpha = alpha;
+      const g = ctx.createRadialGradient(x, y, r * 0.2, x, y, r);
+      g.addColorStop(0, "rgba(255,255,255,0.03)");
+      g.addColorStop(0.72, "rgba(255,255,255,0.10)");
+      g.addColorStop(1, `hsla(${(hue + t * 0.12) % 360}, 90%, 72%, 0.5)`);
       ctx.fillStyle = g;
       ctx.beginPath();
-      ctx.arc(b.x, b.y, r, 0, Math.PI * 2);
+      ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fill();
-
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = `hsla(${(b.hue + 120 + t * 0.12) % 360}, 85%, 60%, 0.55)`;
+      ctx.lineWidth = r > 12 ? 1.5 : 1;
+      ctx.strokeStyle = `hsla(${(hue + 120 + t * 0.12) % 360}, 85%, 62%, 0.6)`;
       ctx.stroke();
-
-      // brilho
-      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
       ctx.beginPath();
-      ctx.ellipse(b.x - r * 0.35, b.y - r * 0.4, r * 0.28, r * 0.16, -0.6, 0, Math.PI * 2);
+      ctx.ellipse(x - r * 0.35, y - r * 0.4, r * 0.28, r * 0.16, -0.6, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
 
     function tick(now) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = list.length - 1; i >= 0; i--) {
-        const b = list[i];
-        const t = now - b.born;
-        if (t > b.life) { list.splice(i, 1); continue; }
+
+      // rastro
+      for (let i = trail.length - 1; i >= 0; i--) {
+        const b = trail[i], t = now - b.born;
+        if (t > b.life) { trail.splice(i, 1); continue; }
         b.x += b.vx + Math.sin(t / 260 + b.phase) * 0.25;
         b.y += b.vy;
-        drawBubble(b, t);
+        const p = t / b.life;
+        const alpha = p < 0.15 ? p / 0.15 : p > 0.85 ? (1 - p) / 0.15 : 1;
+        bubbleBody(b.x, b.y, b.r * (0.6 + 0.4 * Math.min(1, p * 4)), b.hue, t, alpha * 0.9);
       }
-      if (list.length) requestAnimationFrame(tick);
+
+      // bolhas do clique: enchem rápido e estouram com um anel que se abre
+      for (let i = pops.length - 1; i >= 0; i--) {
+        const b = pops[i], t = now - b.born;
+        if (t < b.grow) {
+          const k = t / b.grow, ease = 1 - Math.pow(1 - k, 3);
+          bubbleBody(b.x, b.y - k * 6, b.r * (0.3 + 0.7 * ease) * (1 + Math.sin(k * 9) * 0.04), b.hue, t, 0.95);
+          continue;
+        }
+        if (!b.popped) { b.popped = true; burst(b.x, b.y - 6, b.r, b.hue); }
+        const k = (t - b.grow) / 260;
+        if (k >= 1) { pops.splice(i, 1); continue; }
+        ctx.save();
+        ctx.globalAlpha = (1 - k) * 0.9;
+        ctx.lineWidth = 2 * (1 - k) + 0.5;
+        ctx.strokeStyle = `hsla(${b.hue}, 90%, 70%, 1)`;
+        const rr = b.r * (1 + k * 0.9);
+        for (let s = 0; s < 6; s++) {          // anel quebrado em pedaços
+          const a0 = (s / 6) * Math.PI * 2 + k;
+          ctx.beginPath();
+          ctx.arc(b.x, b.y - 6, rr, a0, a0 + 0.62);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // gotinhas
+      for (let i = drops.length - 1; i >= 0; i--) {
+        const d = drops[i], t = now - d.born;
+        if (t > d.life) { drops.splice(i, 1); continue; }
+        d.x += d.vx; d.y += d.vy; d.vy += 0.12; d.vx *= 0.97;
+        ctx.save();
+        ctx.globalAlpha = 1 - t / d.life;
+        ctx.fillStyle = `hsla(${d.hue}, 90%, 78%, 0.95)`;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      if (trail.length || pops.length || drops.length) requestAnimationFrame(tick);
       else running = false;
     }
   })();
@@ -255,7 +339,6 @@ const PETINO = {
     let loaded = 0;
     let current = 0;          // frame exibido (com suavização)
     let target = 0;           // frame pedido pela rolagem
-    let drawn = -1;           // índice pedido
     let shown = -1;           // frame realmente desenhado (pode ser o vizinho carregado)
     let rafId = 0;
 
@@ -268,12 +351,12 @@ const PETINO = {
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w;
         canvas.height = h;
-        drawn = -1;
         draw(Math.round(current));
       }
     };
 
-    /* Desenha preservando a proporção (contain), alinhado embaixo */
+    /* Desenha preservando a proporção. Com zoom, os pets ficam maiores que a área visível
+       e a "câmera" desce pela pilha conforme a rolagem (topo = gato, fim da página = golden). */
     function draw(index) {
       // usa o frame carregado mais próximo enquanto os demais ainda chegam
       let img = frames[index], at = index;
@@ -283,12 +366,24 @@ const PETINO = {
       }
       if (!img) return;
       const cw = canvas.width, ch = canvas.height;
-      const scale = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
-      const w = img.naturalWidth * scale;
-      const h = img.naturalHeight * scale;
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      const c = cfg.crop;
+      const sx = c.x * iw, sy = c.y * ih, sw = c.w * iw, sh = c.h * ih;
+      let scale, dx, dy;
+      if (wrap.classList.contains("is-static")) {
+        // movimento reduzido: pilha inteira visível, sem panorâmica
+        scale = Math.min(cw / sw, ch / sh);
+        dx = (cw - sw * scale) / 2;
+        dy = ch - sh * scale;
+      } else {
+        const zoom = railMode.matches ? cfg.zoom.desktop : cfg.zoom.mobile;
+        scale = Math.max((ch * zoom) / sh, cw / sw * 0.6);
+        const dh = sh * scale;
+        dx = cw / 2 - (cfg.focusX * iw - sx) * scale;
+        dy = -(current / (cfg.total - 1)) * Math.max(0, dh - ch);
+      }
       ctx.clearRect(0, 0, cw, ch);
-      ctx.drawImage(img, (cw - w) / 2, ch - h, w, h);
-      drawn = index;
+      ctx.drawImage(img, sx, sy, sw, sh, dx, dy, sw * scale, sh * scale);
       shown = at;
     }
 
@@ -301,8 +396,7 @@ const PETINO = {
     function loop() {
       current += (target - current) * 0.14;           // troca suave entre frames
       if (Math.abs(target - current) < 0.05) current = target;
-      const idx = Math.round(current);
-      if (idx !== drawn) draw(idx);
+      draw(Math.round(current));                     // redesenha sempre: a panorâmica é contínua
       rafId = current !== target ? requestAnimationFrame(loop) : 0;
     }
 
