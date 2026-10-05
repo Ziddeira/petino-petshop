@@ -629,7 +629,7 @@ p { margin: 0 0 1em; }
   --page: var(--sky-25);
   --page-rgb: 247, 251, 255;
   /* sombra de contorno (fina) + sombra projetada (profundidade) */
-  --pets-shadow: drop-shadow(0 0 1.5px rgba(1, 1, 71, .45)) drop-shadow(18px 26px 26px rgba(29, 78, 216, .30));
+  --pets-shadow: drop-shadow(0 0 1.5px rgba(0, 0, 30, .85)) drop-shadow(0 0 7px rgba(0, 0, 40, .55)) drop-shadow(18px 26px 26px rgba(1, 1, 71, .35));
   --pets-opacity: .88;
   --pets-tone: saturate(.95);
 }
@@ -666,7 +666,7 @@ main, .footer { position: relative; z-index: 1; }
 @media (max-width: 960px) {
   :root {
     --pets-opacity: .42;
-    --pets-shadow: drop-shadow(0 0 1px rgba(1, 1, 71, .45)) drop-shadow(8px 14px 14px rgba(29, 78, 216, .28));
+    --pets-shadow: drop-shadow(0 0 1.5px rgba(0, 0, 20, .9)) drop-shadow(0 0 5px rgba(0, 0, 30, .6)) drop-shadow(8px 14px 14px rgba(0, 0, 40, .35));
   }
   .scroll-anim::after {
     background:
@@ -776,7 +776,7 @@ main, .footer { position: relative; z-index: 1; }
   color-scheme: dark;
   --page: #010147;
   --page-rgb: 1, 1, 71;
-  --pets-shadow: drop-shadow(0 0 2px rgba(0, 0, 0, .7)) drop-shadow(0 0 1px rgba(174, 235, 70, .35)) drop-shadow(20px 28px 28px rgba(0, 0, 20, .65));
+  --pets-shadow: drop-shadow(0 0 2px rgba(0, 0, 0, .95)) drop-shadow(0 0 9px rgba(0, 0, 0, .8)) drop-shadow(20px 28px 28px rgba(0, 0, 15, .7));
   --pets-tone: brightness(.9) saturate(.92);
   --ink: #e8ecff;
   --muted: #b4bce0;
@@ -852,7 +852,9 @@ main, .footer { position: relative; z-index: 1; }
 [data-theme="navy"] .booking__perks span,
 [data-theme="navy"] .contact__list .icon { background: var(--surface); border-color: var(--line); }
 [data-theme="navy"] .card:hover { border-color: rgba(174, 235, 70, .5); }
-[data-theme="navy"] .trust__item strong, [data-theme="navy"] .float-card strong { color: #fff; }
+[data-theme="navy"] .trust__item strong, [data-theme="navy"] .float-card strong,
+[data-theme="navy"] .faq summary, [data-theme="navy"] .review figcaption strong,
+[data-theme="navy"] .contact__list strong, [data-theme="navy"] .about__content .about__sign { color: #fff; }
 [data-theme="navy"] .trust__item .icon,
 [data-theme="navy"] .card__link,
 [data-theme="navy"] .contact__list .icon,
