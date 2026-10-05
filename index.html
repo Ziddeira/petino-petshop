@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Petino Petshop | Banho e Tosa, Veterinário e Pet Shop em Palhoça - SC</title>
+  <meta name="description" content="Petino Petshop em Nova Palhoça: banho e tosa com sala de vidro, pacote de 5 banhos a partir de R$190, tosa higiênica a partir de R$15, consulta veterinária, farmácia e tudo para cães e gatos. Agende pelo WhatsApp!">
+  <meta name="theme-color" content="#e6f2ff">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Petino Petshop | Cuidando de quem você mais ama 💚">
+  <meta property="og:description" content="Banho e tosa com sala de vidro, consulta veterinária, farmácia e tudo para seu pet em Palhoça - SC.">
+  <meta property="og:image" content="assets/img/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" as="image" href="frames/frame_0001.webp" media="(min-width: 1100px)">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "PetStore",
+    "name": "Petino PetShop",
+    "description": "Banho e tosa, consulta veterinária, medicamentos, acessórios, brinquedos e tudo para cães e gatos.",
+    "image": "assets/img/og-image.jpg",
+    "telephone": "+55 48 3300-0909",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Av. Aleixo Alves de Souza, 1453 - sala 02",
+      "addressLocality": "Palhoça",
+      "addressRegion": "SC",
+      "postalCode": "88131-560",
+      "addressCountry": "BR"
+    },
+    "areaServed": "Palhoça - SC",
+    "priceRange": "$$",
+    "makesOffer": [
+      { "@type": "Offer", "name": "Pacote com 5 banhos", "price": "190.00", "priceCurrency": "BRL" },
+      { "@type": "Offer", "name": "Tosa higiênica", "price": "15.00", "priceCurrency": "BRL" },
+      { "@type": "Offer", "name": "Hidratação", "price": "30.00", "priceCurrency": "BRL" },
+      { "@type": "Offer", "name": "Desembolo de pelos", "price": "35.00", "priceCurrency": "BRL" },
+      { "@type": "Offer", "name": "Remoção de subpelos", "price": "45.00", "priceCurrency": "BRL" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Barra superior -->
+  <div class="topbar">
+    <div class="container topbar__inner">
+      <span>🛁 <strong>Pacote com 5 banhos</strong> a partir de R$190</span>
+      <span class="topbar__sep" aria-hidden="true">•</span>
+      <span class="topbar__hide-sm">📍 Nova Palhoça, Palhoça - SC</span>
+      <span class="topbar__sep topbar__hide-sm" aria-hidden="true">•</span>
+      <a href="tel:+554833000909" class="topbar__hide-sm">📞 (48) 3300-0909</a>
+    </div>
+  </div>
+
+  <!-- Cabeçalho -->
+  <header class="header" id="topo">
+    <div class="container header__inner">
+      <a href="#topo" class="header__logo" aria-label="Petino Petshop - início">
+        <img src="assets/img/logo-wide.png" alt="Petino Petshop" width="387" height="165">
+      </a>
+
+      <nav class="nav" id="menu" aria-label="Menu principal">
+        <a href="#servicos">Serviços</a>
+        <a href="#pacote">Pacote de banhos</a>
+        <a href="#precos">Preços</a>
+        <a href="#avaliacoes">Avaliações</a>
+        <a href="#contato">Contato</a>
+        <a href="#agendar" class="btn btn--lime btn--sm nav__cta">Agendar agora</a>
+      </nav>
+
+      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Animação de scroll: lateral direita fixa (desktop) / mini janela (celular) -->
+  <aside class="scroll-anim" aria-label="Animação dos pets no banho de espuma">
+    <canvas id="scroll-canvas" role="img" aria-label="Pets empilhados tomando banho de espuma, animados conforme a rolagem"></canvas>
+    <div class="scroll-anim__loader" aria-hidden="true"><span></span></div>
+    <button class="scroll-anim__close" type="button" aria-label="Fechar animação">&times;</button>
+  </aside>
+
+  <main id="conteudo">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="doodles" aria-hidden="true">
+        <svg class="doodle doodle--spark" style="--x:3%;--y:10%;--r:-10deg"><use href="#d-spark"/></svg>
+        <svg class="doodle doodle--heart" style="--x:47%;--y:8%;--r:12deg"><use href="#d-heart"/></svg>
+        <svg class="doodle doodle--paw" style="--x:92%;--y:6%;--r:20deg"><use href="#i-paw"/></svg>
+        <svg class="doodle doodle--paw doodle--sm" style="--x:44%;--y:86%;--r:-18deg"><use href="#i-paw"/></svg>
+        <svg class="doodle doodle--spark" style="--x:95%;--y:82%;--r:160deg"><use href="#d-spark"/></svg>
+      </div>
+
+      <div class="container hero__grid">
+        <div class="hero__content reveal">
+          <a class="rating-pill" href="#avaliacoes">
+            <span class="g-badge" aria-hidden="true">G</span>
+            <strong>+4.200 avaliações</strong> no Google
+          </a>
+
+          <h1 class="art-title art-title--hero">
+            <span class="art-title__top">Cuidando de quem</span>
+            <span class="art-title__big">você mais ama</span>
+          </h1>
+
+          <p class="hero__text">
+            Banho e tosa em <strong>sala de vidro</strong> — você vê seu pet sendo cuidado —,
+            consulta veterinária, farmácia e tudo o que seu melhor amigo precisa,
+            em um só lugar em Palhoça.
+          </p>
+
+          <div class="hero__ctas">
+            <a class="btn btn--lime btn--lg" data-wa="Olá, Petino! 🐾 Quero agendar um banho para o meu pet." href="#agendar">
+              <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+              Agendar banho e tosa
+            </a>
+            <a class="btn btn--light-ghost btn--lg" href="#precos">Ver preços</a>
+          </div>
+
+          <ul class="hero__bullets">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Unhas e ouvidos inclusos</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Cães e gatos</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Veterinário no local</li>
+          </ul>
+        </div>
+
+        <div class="hero__visual reveal" aria-hidden="true">
+          <div class="hero__ring"></div>
+          <div class="hero__blob">
+            <img src="assets/img/logo.png" alt="" width="447" height="447" class="hero__logo">
+          </div>
+          <div class="float-card float-card--a">
+            <span class="float-card__icon">🛁</span>
+            <div><strong>5 banhos por R$190</strong><small>Use em até 12 meses</small></div>
+          </div>
+          <div class="float-card float-card--b">
+            <span class="float-card__icon">👀</span>
+            <div><strong>Banho no vidro</strong><small>Acompanhe tudo de pertinho</small></div>
+          </div>
+          <div class="float-card float-card--c">
+            <span class="float-card__icon">🩺</span>
+            <div><strong>Veterinário</strong><small>Consulta no próprio pet shop</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAIXA DE CONFIANÇA -->
+    <section class="trust" aria-label="Diferenciais">
+      <div class="container">
+        <div class="trust__grid">
+          <div class="trust__item">
+            <svg class="icon icon--lg" aria-hidden="true"><use href="#i-eye"/></svg>
+            <div><strong>Sala de banho de vidro</strong><span>Transparência total</span></div>
+          </div>
+          <div class="trust__item">
+            <svg class="icon icon--lg" aria-hidden="true"><use href="#i-stetho"/></svg>
+            <div><strong>Consulta veterinária</strong><span>Saúde em primeiro lugar</span></div>
+          </div>
+          <div class="trust__item">
+            <svg class="icon icon--lg" aria-hidden="true"><use href="#i-pill"/></svg>
+            <div><strong>Farmácia pet</strong><span>Medicamentos e cuidados</span></div>
+          </div>
+          <div class="trust__item">
+            <svg class="icon icon--lg" aria-hidden="true"><use href="#i-paw"/></svg>
+            <div><strong>Cães e gatos</strong><span>Produtos para todos</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section class="section" id="servicos">
+      <div class="container">
+        <header class="section__head reveal">
+          <span class="eyebrow">Nossos serviços</span>
+          <h2>Tudo o que seu pet precisa, <span class="hl">num só lugar</span></h2>
+          <p>Do banho cheiroso à consulta com o veterinário. Escolha o serviço e fale com a gente em segundos.</p>
+        </header>
+
+        <div class="cards">
+          <article class="card card--featured reveal">
+            <span class="card__badge">Mais procurado</span>
+            <div class="card__icon"><svg class="icon" aria-hidden="true"><use href="#i-scissors"/></svg></div>
+            <h3>Banho &amp; Tosa</h3>
+            <p>Banho com linha Hydra, corte de unhas, limpeza de ouvidos, perfume e adereços inclusos. Tudo numa sala de vidro, à vista.</p>
+            <a class="card__link" data-wa="Olá, Petino! 🐾 Quero agendar um banho e tosa." href="#agendar">Agendar banho &amp; tosa <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="card reveal">
+            <div class="card__icon"><svg class="icon" aria-hidden="true"><use href="#i-stetho"/></svg></div>
+            <h3>Consulta veterinária</h3>
+            <p>Avaliação clínica, orientação e acompanhamento para a saúde do seu pet, com o carinho de sempre.</p>
+            <a class="card__link" data-wa="Olá, Petino! 🩺 Gostaria de agendar uma consulta veterinária." href="#agendar">Agendar consulta <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="card reveal">
+            <div class="card__icon"><svg class="icon" aria-hidden="true"><use href="#i-pill"/></svg></div>
+            <h3>Farmácia &amp; medicamentos</h3>
+            <p>Antipulgas, vermífugos, medicamentos de uso contínuo e tudo para o tratamento indicado pelo veterinário.</p>
+            <a class="card__link" data-wa="Olá, Petino! 💊 Queria saber se vocês têm um medicamento disponível." href="#contato">Consultar disponibilidade <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="card reveal">
+            <div class="card__icon"><svg class="icon" aria-hidden="true"><use href="#i-bowl"/></svg></div>
+            <h3>Rações &amp; alimentação</h3>
+            <p>Rações, petiscos e opções especiais para pets com alergias ou sensibilidade — a gente ajuda a escolher.</p>
+            <a class="card__link" data-wa="Olá, Petino! 🦴 Preciso de ajuda para escolher a ração do meu pet." href="#contato">Pedir indicação <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="card reveal">
+            <div class="card__icon"><svg class="icon" aria-hidden="true"><use href="#i-ball"/></svg></div>
+            <h3>Acessórios &amp; brinquedos</h3>
+            <p>Coleiras, caminhas, comedouros, roupinhas e brinquedos para gastar energia e deixar a rotina mais feliz.</p>
+            <a class="card__link" data-wa="Olá, Petino! 🎾 Quero saber sobre acessórios e brinquedos." href="#contato">Ver novidades <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="card reveal">
+            <div class="card__icon"><svg class="icon" aria-hidden="true"><use href="#i-cat"/></svg></div>
+            <h3>Cantinho dos gatos</h3>
+            <p>Boa variedade para felinos: areias, arranhadores, sachês, rações e brinquedos pensados para eles.</p>
+            <a class="card__link" data-wa="Olá, Petino! 🐱 Quero saber sobre produtos para gatos." href="#contato">Falar sobre meu gato <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PACOTE DE BANHOS (inspirado na arte do Instagram) -->
+    <section class="section section--sky" id="pacote">
+      <div class="doodles" aria-hidden="true">
+        <svg class="doodle doodle--spark" style="--x:4%;--y:6%;--r:-10deg"><use href="#d-spark"/></svg>
+        <svg class="doodle doodle--heart" style="--x:90%;--y:5%;--r:14deg"><use href="#d-heart"/></svg>
+        <svg class="doodle doodle--paw" style="--x:94%;--y:44%;--r:24deg"><use href="#i-paw"/></svg>
+      </div>
+
+      <div class="container package">
+        <div class="package__content reveal">
+          <h2 class="art-title">
+            <span class="art-title__top">Pacote de</span>
+            <span class="art-title__big">Banhos</span>
+          </h2>
+
+          <div class="art-box art-box--strip">
+            <svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>
+            <span><strong class="lime">5 banhos</strong> que podem ser usados em até 12 meses.</span>
+          </div>
+
+          <div class="package__row">
+            <div class="art-box price-box">
+              <span class="price-box__from">A partir de</span>
+              <span class="price-box__value"><small>R$</small>190</span>
+              <span class="price-box__each">≈ R$38 por banho</span>
+            </div>
+
+            <div class="art-box art-box--list">
+              <span class="art-box__title">Inclui em todos os banhos:</span>
+              <ul class="ticks">
+                <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Corte de unhas</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Limpeza de ouvidos</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Banho com linha Hydra</li>
+              </ul>
+            </div>
+          </div>
+
+          <ul class="ticks ticks--muted">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Banhos previamente agendados</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Uso pessoal e intransferível por pet</li>
+          </ul>
+
+          <a class="btn btn--lime btn--lg" data-wa="Olá, Petino! 🛁 Quero contratar o Pacote com 5 banhos para o meu pet." href="#agendar">
+            <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+            Quero o pacote de banhos
+          </a>
+
+          <p class="package__tagline">
+            <svg class="icon" aria-hidden="true"><use href="#i-paw"/></svg>
+            <span><strong class="lime">Mais cuidado, mais carinho, mais vantagens</strong> para o seu melhor amigo! 💚</span>
+          </p>
+        </div>
+
+        <div class="package__visual reveal">
+          <!-- Cartão-fidelidade ilustrativo do pacote (troque por uma foto se quiser: veja README) -->
+          <div class="punch-card" aria-hidden="true">
+            <div class="punch-card__head">
+              <img src="assets/img/logo-wide.png" alt="" width="387" height="165" loading="lazy">
+              <span>Cartão Pacote de Banhos</span>
+            </div>
+            <ol class="punch-card__slots">
+              <li class="is-done"><svg class="icon"><use href="#i-paw"/></svg></li>
+              <li class="is-done"><svg class="icon"><use href="#i-paw"/></svg></li>
+              <li><svg class="icon"><use href="#i-paw"/></svg></li>
+              <li><svg class="icon"><use href="#i-paw"/></svg></li>
+              <li><svg class="icon"><use href="#i-paw"/></svg></li>
+            </ol>
+            <div class="punch-card__foot">
+              <span><strong>Validade:</strong> 12 meses</span>
+              <span class="punch-card__bubbles"><i></i><i></i><i></i></span>
+            </div>
+          </div>
+          <div class="sticker">5x<br><small>banhos</small></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABELA DE PREÇOS -->
+    <section class="section section--soft" id="precos">
+      <div class="container">
+        <header class="section__head reveal">
+          <span class="eyebrow">Preços transparentes</span>
+          <h2>Tosa e <span class="hl">cuidados adicionais</span></h2>
+          <p>Valores “a partir de”: o preço final depende do porte e da pelagem do seu pet. Confirme pelo WhatsApp em segundos.</p>
+        </header>
+
+        <div class="pricing">
+          <!-- Tosa higiênica -->
+          <article class="price-card price-card--deep reveal">
+            <svg class="doodle doodle--spark doodle--inline" aria-hidden="true"><use href="#d-spark"/></svg>
+            <h3 class="art-title art-title--sm">
+              <span class="art-title__top">Tosa</span>
+              <span class="art-title__big">Higiênica</span>
+            </h3>
+
+            <div class="art-box art-box--icon">
+              <svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>
+              <p><strong class="lime">Compreende:</strong> aparo de patas, entre coxins e contorno, pelo em frente/abaixo dos olhos e limpeza das partes íntimas.</p>
+            </div>
+
+            <div class="art-box art-box--icon">
+              <svg class="icon" aria-hidden="true"><use href="#i-paw"/></svg>
+              <p><strong class="lime">Os banhos incluem:</strong> corte das unhas, limpeza dos ouvidos, perfumes e adereços.</p>
+            </div>
+
+            <div class="price-card__bottom">
+              <div class="art-box price-box price-box--sm">
+                <span class="price-box__from">a partir de</span>
+                <span class="price-box__value"><small>R$</small>15</span>
+              </div>
+              <div class="art-box art-box--warn">
+                <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+                <p>Pet com <strong>alergia à lâmina</strong>? Avise a gente: nesses casos a higiênica é feita com tesoura.</p>
+              </div>
+            </div>
+
+            <a class="btn btn--lime btn--block" data-wa="Olá, Petino! ✂️ Quero agendar uma tosa higiênica." href="#agendar">
+              <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+              Agendar tosa higiênica
+            </a>
+          </article>
+
+          <!-- Cuidados adicionais -->
+          <article class="price-card reveal">
+            <h3 class="price-card__title">Cuidados <span class="hl">adicionais</span></h3>
+            <p class="price-card__sub">Turbine o banho do seu pet com um cuidado extra.</p>
+
+            <ul class="addons">
+              <li class="addon">
+                <span class="addon__icon" aria-hidden="true"><svg class="icon"><use href="#i-comb"/></svg></span>
+                <span class="addon__name">Desembolo de pelos<small>a partir de</small></span>
+                <span class="addon__price"><small>R$</small>35</span>
+              </li>
+              <li class="addon">
+                <span class="addon__icon" aria-hidden="true"><svg class="icon"><use href="#i-drop"/></svg></span>
+                <span class="addon__name">Hidratação<small>a partir de</small></span>
+                <span class="addon__price"><small>R$</small>30</span>
+              </li>
+              <li class="addon">
+                <span class="addon__icon" aria-hidden="true"><svg class="icon"><use href="#i-brush"/></svg></span>
+                <span class="addon__name">Remoção de subpelos<small>a partir de</small></span>
+                <span class="addon__price"><small>R$</small>45</span>
+              </li>
+            </ul>
+
+            <a class="addons__help" data-wa="Olá, Petino! 🐾 Qual cuidado adicional é ideal para o meu pet?" href="#agendar">
+              <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+              <span><strong>Dúvidas sobre qual adicional é ideal para o seu pet?</strong> Fale com a gente pelo WhatsApp!</span>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESTAQUE: BANHO E TOSA NO VIDRO -->
+    <section class="section section--sky" id="banho-e-tosa">
+      <div class="container split">
+        <div class="split__visual reveal" aria-hidden="true">
+          <div class="glass-room">
+            <div class="glass-room__window">
+              <span class="glass-room__shine"></span>
+              <span class="glass-room__pet">🐶</span>
+              <span class="glass-room__bubble" style="--x:22%;--y:30%;--s:22px"></span>
+              <span class="glass-room__bubble" style="--x:70%;--y:22%;--s:14px"></span>
+              <span class="glass-room__bubble" style="--x:62%;--y:62%;--s:30px"></span>
+              <span class="glass-room__bubble" style="--x:30%;--y:70%;--s:12px"></span>
+            </div>
+            <div class="glass-room__label">
+              <span class="live-dot"></span> Você acompanha tudo pelo vidro
+            </div>
+          </div>
+        </div>
+
+        <div class="split__content reveal">
+          <h2 class="art-title art-title--md">
+            <span class="art-title__top">Banho e tosa</span>
+            <span class="art-title__big">à vista</span>
+          </h2>
+          <p>
+            Nossa sala de banho e tosa é toda de vidro. Assim você vê, com seus próprios olhos,
+            o carinho e a atenção que seu peludo recebe. Sem mistério, sem preocupação.
+          </p>
+          <ul class="checklist">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Banho com linha Hydra</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Corte de unhas e limpeza de ouvidos inclusos</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Perfume e adereços para sair lindo</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Higiênica na tesoura para pets com alergia à lâmina</li>
+          </ul>
+
+          <blockquote class="mini-quote">
+            “A parte de banho e tosa é com vidro, dando para ver os peludos sendo cuidados.”
+            <cite>— Mariana Campos, no Google</cite>
+          </blockquote>
+
+          <a class="btn btn--lime btn--lg" data-wa="Olá, Petino! 🛁 Quero agendar banho e tosa na sala de vidro." href="#agendar">
+            <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+            Quero agendar
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="section">
+      <div class="container">
+        <header class="section__head reveal">
+          <span class="eyebrow">Simples assim</span>
+          <h2>Agendar leva <span class="hl">menos de 1 minuto</span></h2>
+        </header>
+
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step__num">1</span>
+            <h3>Conte sobre seu pet</h3>
+            <p>Preencha o formulário rapidinho ou chame direto no WhatsApp.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__num">2</span>
+            <h3>Escolha dia e horário</h3>
+            <p>Nossa equipe confirma o melhor horário para você e seu pet.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__num">3</span>
+            <h3>Busque seu pet feliz</h3>
+            <p>Limpinho, cheiroso e cheio de carinho. É só buscar e curtir!</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- FORMULÁRIO DE AGENDAMENTO -->
+    <section class="section section--soft" id="agendar">
+      <div class="container booking">
+        <div class="booking__info reveal">
+          <span class="eyebrow">Agendamento</span>
+          <h2>Reserve o horário do <span class="hl">seu pet</span></h2>
+          <p>Preencha os dados e envie: sua mensagem chega pronta no nosso WhatsApp. A gente responde e confirma o horário.</p>
+
+          <ul class="booking__perks">
+            <li><span>⚡</span> Resposta rápida em horário de atendimento</li>
+            <li><span>🔒</span> Seus dados vão só para a Petino</li>
+            <li><span>💚</span> Sem compromisso — tire suas dúvidas</li>
+          </ul>
+
+          <div class="booking__alt">
+            Prefere ligar?
+            <a href="tel:+554833000909"><strong>(48) 3300-0909</strong></a>
+          </div>
+        </div>
+
+        <form class="form reveal" id="booking-form" novalidate>
+          <div class="form__row">
+            <div class="field">
+              <label for="f-tutor">Seu nome</label>
+              <input id="f-tutor" name="tutor" type="text" autocomplete="name" placeholder="Ex.: Ana" required>
+            </div>
+            <div class="field">
+              <label for="f-pet">Nome do pet</label>
+              <input id="f-pet" name="pet" type="text" placeholder="Ex.: Thor" required>
+            </div>
+          </div>
+
+          <fieldset class="field">
+            <legend>Seu pet é</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="especie" value="Cachorro" checked><span>🐶 Cachorro</span></label>
+              <label class="chip"><input type="radio" name="especie" value="Gato"><span>🐱 Gato</span></label>
+            </div>
+          </fieldset>
+
+          <div class="form__row">
+            <div class="field">
+              <label for="f-servico">Serviço</label>
+              <select id="f-servico" name="servico" required>
+                <option value="Banho">Banho</option>
+                <option value="Banho e tosa" selected>Banho e tosa</option>
+                <option value="Pacote com 5 banhos">Pacote com 5 banhos (a partir de R$190)</option>
+                <option value="Tosa higiênica">Tosa higiênica (a partir de R$15)</option>
+                <option value="Consulta veterinária">Consulta veterinária</option>
+                <option value="Outro">Outro / tirar dúvidas</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-porte">Porte</label>
+              <select id="f-porte" name="porte">
+                <option value="Mini">Mini (até 5 kg)</option>
+                <option value="Pequeno" selected>Pequeno (5 a 10 kg)</option>
+                <option value="Médio">Médio (10 a 25 kg)</option>
+                <option value="Grande">Grande (+25 kg)</option>
+              </select>
+            </div>
+          </div>
+
+          <fieldset class="field">
+            <legend>Quer adicionar um cuidado extra? <small>(opcional)</small></legend>
+            <div class="chips chips--wrap">
+              <label class="chip chip--check"><input type="checkbox" name="adicionais" value="Hidratação"><span>💧 Hidratação</span></label>
+              <label class="chip chip--check"><input type="checkbox" name="adicionais" value="Desembolo de pelos"><span>🪮 Desembolo</span></label>
+              <label class="chip chip--check"><input type="checkbox" name="adicionais" value="Remoção de subpelos"><span>🧹 Subpelos</span></label>
+            </div>
+          </fieldset>
+
+          <div class="form__row">
+            <div class="field">
+              <label for="f-data">Dia preferido</label>
+              <input id="f-data" name="data" type="date">
+            </div>
+            <div class="field">
+              <label for="f-periodo">Período</label>
+              <select id="f-periodo" name="periodo">
+                <option value="Manhã">Manhã</option>
+                <option value="Tarde">Tarde</option>
+                <option value="Qualquer horário">Qualquer horário</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f-obs">Observações <small>(opcional)</small></label>
+            <textarea id="f-obs" name="obs" rows="3" placeholder="Raça, alergias (ex.: à lâmina), comportamento, tipo de tosa..."></textarea>
+          </div>
+
+          <p class="form__error" role="alert" hidden>Preencha seu nome e o nome do pet. 🐾</p>
+
+          <button class="btn btn--whatsapp btn--lg btn--block" type="submit">
+            <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+            Enviar pelo WhatsApp
+          </button>
+          <p class="form__note">Abre o WhatsApp com a mensagem pronta. É só tocar em enviar.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- AVALIAÇÕES -->
+    <section class="section" id="avaliacoes">
+      <div class="container">
+        <header class="section__head reveal">
+          <span class="eyebrow">Quem conhece, recomenda</span>
+          <h2><span class="hl">4.229</span> avaliações no Google</h2>
+          <p>Tutores de Palhoça e região contam como é a experiência na Petino.</p>
+        </header>
+
+        <div class="reviews">
+          <figure class="review reveal">
+            <span class="review__mark" aria-hidden="true">“</span>
+            <blockquote>Boa variedade de produtos, incluindo opções para gatos.</blockquote>
+            <figcaption>
+              <span class="avatar" aria-hidden="true">R</span>
+              <span><strong>Rosi Brich</strong><small>Avaliação no Google</small></span>
+            </figcaption>
+          </figure>
+          <figure class="review reveal">
+            <span class="review__mark" aria-hidden="true">“</span>
+            <blockquote>A parte de banho e tosa é com vidro, dando para ver os peludos sendo cuidados.</blockquote>
+            <figcaption>
+              <span class="avatar" aria-hidden="true">M</span>
+              <span><strong>Mariana Campos</strong><small>Avaliação no Google</small></span>
+            </figcaption>
+          </figure>
+          <figure class="review reveal">
+            <span class="review__mark" aria-hidden="true">“</span>
+            <blockquote>Descobrimos alergia a carne e frango, e gastrite grave.</blockquote>
+            <figcaption>
+              <span class="avatar" aria-hidden="true">D</span>
+              <span><strong>Daphany Gorges</strong><small>Avaliação no Google · Veterinário</small></span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="center reveal">
+          <a class="btn btn--outline" data-link="reviews" href="#" target="_blank" rel="noopener">Ver todas as avaliações no Google</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section class="section section--soft" id="sobre">
+      <div class="container about">
+        <div class="about__content reveal">
+          <span class="eyebrow">Sobre a Petino</span>
+          <h2>Tratamos cada pet como <span class="hl">parte da família</span></h2>
+          <p>
+            A Petino Petshop é o lugar ideal para quem busca cuidado, carinho e qualidade para seu pet.
+            Oferecemos banho e tosa, consulta veterinária, medicamentos, acessórios, brinquedos e tudo
+            o que seu melhor amigo precisa para uma vida saudável e feliz.
+          </p>
+          <p>
+            Nosso compromisso é tratar cada pet com amor e atenção, como se fosse da nossa família.
+            Venha nos conhecer e surpreenda-se com nosso atendimento!
+          </p>
+          <p class="about__sign">Cuidando de quem você mais ama 💚</p>
+          <a class="btn btn--outline" data-link="instagram" href="#" target="_blank" rel="noopener">
+            <svg class="icon" aria-hidden="true"><use href="#i-insta"/></svg> Siga no Instagram
+          </a>
+        </div>
+
+        <div class="about__stats reveal">
+          <div class="stat"><strong>4.229</strong><span>avaliações no Google</span></div>
+          <div class="stat"><strong>🐶 + 🐱</strong><span>cães e gatos</span></div>
+          <div class="stat"><strong>1 lugar</strong><span>banho, vet, farmácia e loja</span></div>
+          <div class="stat"><strong>100%</strong><span>à vista na sala de vidro</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="duvidas">
+      <div class="container container--narrow">
+        <header class="section__head reveal">
+          <span class="eyebrow">Dúvidas frequentes</span>
+          <h2>Perguntas que todo tutor faz</h2>
+        </header>
+
+        <div class="faq">
+          <details class="reveal">
+            <summary>Como faço para agendar banho e tosa?</summary>
+            <p>É só preencher o <a href="#agendar">formulário de agendamento</a> ou chamar a gente no WhatsApp. Confirmamos o melhor dia e horário para você.</p>
+          </details>
+          <details class="reveal">
+            <summary>Como funciona o pacote de banhos?</summary>
+            <p>São 5 banhos, a partir de R$190, que podem ser usados em até 12 meses. Os banhos são previamente agendados e o pacote é de uso pessoal e intransferível por pet. Todos incluem corte de unhas, limpeza de ouvidos e banho com linha Hydra.</p>
+          </details>
+          <details class="reveal">
+            <summary>O que está incluso na tosa higiênica?</summary>
+            <p>Aparo de patas, entre coxins e contorno, pelo em frente/abaixo dos olhos e limpeza das partes íntimas — a partir de R$15. Se o seu pet tem alergia à lâmina, avise: nesses casos a higiênica é feita com tesoura.</p>
+          </details>
+          <details class="reveal">
+            <summary>Posso acompanhar o banho do meu pet?</summary>
+            <p>Sim! Nossa sala de banho e tosa é de vidro, então você pode ver seu peludo sendo cuidado.</p>
+          </details>
+          <details class="reveal">
+            <summary>Vocês têm veterinário?</summary>
+            <p>Sim, oferecemos consulta veterinária no próprio pet shop. Agende pelo WhatsApp ou pelo telefone (48) 3300-0909.</p>
+          </details>
+          <details class="reveal">
+            <summary>Vocês atendem e vendem produtos para gatos?</summary>
+            <p>Com certeza! Temos boa variedade de rações, sachês, areias, arranhadores e brinquedos para felinos.</p>
+          </details>
+          <details class="reveal">
+            <summary>Qual o horário de atendimento?</summary>
+            <p>Atendemos até às 19h. Para confirmar o horário do dia, chame no WhatsApp ou ligue para (48) 3300-0909.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO / LOCALIZAÇÃO -->
+    <section class="section section--soft" id="contato">
+      <div class="container contact">
+        <div class="contact__info reveal">
+          <span class="eyebrow">Venha nos visitar</span>
+          <h2>Estamos em <span class="hl">Nova Palhoça</span></h2>
+
+          <ul class="contact__list">
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>
+              <div><strong>Endereço</strong><span>Av. Aleixo Alves de Souza, 1453 - sala 02<br>Nova Palhoça, Palhoça - SC, 88131-560</span></div>
+            </li>
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>
+              <div><strong>Telefone</strong><a href="tel:+554833000909">(48) 3300-0909</a></div>
+            </li>
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg>
+              <div><strong>Horário</strong><span>Atendimento até às 19h</span></div>
+            </li>
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#i-insta"/></svg>
+              <div><strong>Instagram</strong><a data-link="instagram" href="#" target="_blank" rel="noopener">Siga a Petino</a></div>
+            </li>
+          </ul>
+
+          <div class="contact__ctas">
+            <a class="btn btn--lime" data-link="directions" href="#" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg> Como chegar
+            </a>
+            <a class="btn btn--whatsapp" data-wa="Olá, Petino! 🐾 Tenho uma dúvida." href="#agendar">
+              <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg> WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <div class="contact__map reveal">
+          <iframe
+            title="Mapa: Petino Petshop em Palhoça"
+            data-link="map"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="final-cta">
+      <div class="doodles" aria-hidden="true">
+        <svg class="doodle doodle--spark" style="--x:8%;--y:18%;--r:-10deg"><use href="#d-spark"/></svg>
+        <svg class="doodle doodle--heart" style="--x:86%;--y:20%;--r:14deg"><use href="#d-heart"/></svg>
+        <svg class="doodle doodle--paw" style="--x:12%;--y:70%;--r:-20deg"><use href="#i-paw"/></svg>
+      </div>
+      <div class="container final-cta__inner reveal">
+        <h2 class="art-title art-title--md">
+          <span class="art-title__top">Seu pet merece</span>
+          <span class="art-title__big">esse carinho</span>
+        </h2>
+        <p>Garanta o horário do banho antes que a agenda lote. 💚</p>
+        <a class="btn btn--lime btn--lg" data-wa="Olá, Petino! 🐾 Quero agendar um horário para o meu pet." href="#agendar">
+          <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+          Agendar pelo WhatsApp
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div>
+        <img src="assets/img/logo-wide.png" alt="Petino Petshop" width="194" height="83" class="footer__logo" loading="lazy">
+        <p>Cuidando de quem você mais ama 💚</p>
+      </div>
+      <div>
+        <h3>Navegação</h3>
+        <a href="#servicos">Serviços</a>
+        <a href="#pacote">Pacote de banhos</a>
+        <a href="#precos">Preços</a>
+        <a href="#duvidas">Dúvidas</a>
+      </div>
+      <div>
+        <h3>Contato</h3>
+        <a href="tel:+554833000909">(48) 3300-0909</a>
+        <a data-wa="Olá, Petino! 🐾" href="#agendar">WhatsApp</a>
+        <a data-link="instagram" href="#" target="_blank" rel="noopener">Instagram</a>
+      </div>
+      <div>
+        <h3>Endereço</h3>
+        <p>Av. Aleixo Alves de Souza, 1453 - sala 02<br>Nova Palhoça, Palhoça - SC<br>88131-560</p>
+      </div>
+    </div>
+    <div class="container footer__bottom">
+      <span>© <span id="ano"></span> Petino PetShop. Todos os direitos reservados.</span>
+    </div>
+  </footer>
+
+  <!-- WhatsApp flutuante -->
+  <a class="wa-float" data-wa="Olá, Petino! 🐾 Vim pelo site e gostaria de atendimento." href="#agendar" aria-label="Fale conosco pelo WhatsApp">
+    <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+    <span class="wa-float__tip">Agende pelo WhatsApp</span>
+  </a>
+
+  <!-- Barra fixa no celular -->
+  <div class="mobile-bar">
+    <a href="tel:+554833000909" class="mobile-bar__call">
+      <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> Ligar
+    </a>
+    <a data-wa="Olá, Petino! 🐾 Vim pelo site e quero agendar." href="#agendar" class="mobile-bar__wa">
+      <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg> Agendar no WhatsApp
+    </a>
+  </div>
+
+  <!-- Bolhas de sabão que seguem o cursor (somente desktop) -->
+  <canvas id="bubbles" aria-hidden="true"></canvas>
+
+  <!-- Ícones e rabiscos -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="d-spark" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M8 30 20 26"/><path d="M14 14l10 8"/><path d="M28 6l2 12"/></g></symbol>
+    <symbol id="d-heart" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" d="M24 40S7 30 7 17.5C7 11.7 11.4 8 16.2 8c3.6 0 6.4 2 7.8 5 1.4-3 4.2-5 7.8-5C36.6 8 41 11.7 41 17.5 41 30 24 40 24 40Z"/></symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.050 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm.01 18.15h-.01a8.23 8.23 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.21 8.21 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.82 2.420a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.22 8.23Zm4.52-6.16c-.25-.12-1.470-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.740.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-paw" viewBox="0 0 24 24"><g fill="currentColor"><ellipse cx="6" cy="9.5" rx="2" ry="2.6"/><ellipse cx="10" cy="5.5" rx="2" ry="2.6"/><ellipse cx="14.5" cy="5.5" rx="2" ry="2.6"/><ellipse cx="18.5" cy="9.5" rx="2" ry="2.6"/><path d="M12.2 11c-2.6 0-6 4.2-6 6.6 0 1.7 1.3 2.6 2.8 2.6 1.4 0 2.1-.7 3.2-.7s1.8.7 3.2.7c1.5 0 2.8-.9 2.8-2.6 0-2.4-3.4-6.6-6-6.6Z"/></g></symbol>
+    <symbol id="i-scissors" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></g></symbol>
+    <symbol id="i-stetho" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v5a5 5 0 0 0 10 0V3"/><path d="M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/></g></symbol>
+    <symbol id="i-pill" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8" width="19" height="8" rx="4" transform="rotate(-45 12 12)"/><path d="m8.5 8.5 7 7"/></g></symbol>
+    <symbol id="i-bowl" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18a9 9 0 0 1-18 0Z"/><path d="M7 12c0-2 1.5-3.5 3-3.5M12 12c0-2.5 1.5-4.5 3.5-4.5"/><path d="M8 21h8"/></g></symbol>
+    <symbol id="i-ball" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6c3.5 3.5 3.5 9.3 0 12.8M18.4 5.6c-3.5 3.5-3.5 9.3 0 12.8"/></g></symbol>
+    <symbol id="i-cat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l3.5 4h9L20 4v9a8 8 0 0 1-16 0Z"/><path d="M9 13h.01M15 13h.01M11 16.5l1 .8 1-.8"/></g></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></g></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></g></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+    <symbol id="i-insta" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></g></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M7.5 14h.01M12 14h.01M16.5 14h.01M7.5 17.5h.01M12 17.5h.01"/></g></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6l8-3Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></g></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 2.4 17.5A2 2 0 0 0 4.1 20.5h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></g></symbol>
+    <symbol id="i-comb" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="2"/><path d="M6 10v9M9 10v7M12 10v9M15 10v7M18 10v9"/></g></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6.5 7 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10 12 3 12 3Z"/><path d="M9 15a3 3 0 0 0 3 3"/></g></symbol>
+    <symbol id="i-brush" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="9" rx="3"/><path d="M7 12v3M10 12v4M14 12v4M17 12v3M12 16v5"/></g></symbol>
+  </svg>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
