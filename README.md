@@ -8,9 +8,10 @@ petino-petshop/
 ├── index.html          ← página
 ├── styles.css          ← todo o visual (temas azul-marinho e azul-claro + verde-limão da marca)
 ├── script.js           ← configuração, interações, bolhas do cursor e animação de scroll
-├── frames/             ← 300 frames do vídeo (569×1190, WebP com fundo transparente, ~11 MB)
-│   ├── frame_0001.webp … frame_0300.webp
-│   └── mobile/         ← os mesmos 300 frames em 284×595 (celular e tablet, ~7 MB)
+├── frames/             ← 300 frames do vídeo, WebP com fundo transparente
+│   ├── frame_0001.webp … frame_0300.webp   ← 569×1190 (camada base do computador)
+│   ├── 4k/             ← 1707×3570, recorte de quadros 4K ampliados por IA (baixados sob demanda)
+│   └── mobile/         ← 426×891 (celular e tablet)
 └── assets/img/         ← logo, favicon e imagem de compartilhamento
 ```
 
@@ -26,32 +27,38 @@ python3 -m http.server 8000
 Para publicar, envie a pasta inteira para qualquer hospedagem estática
 (GitHub Pages, Netlify, Vercel, Hostinger…).
 
-## Animação de scroll (sequência de frames)
+## Animação de scroll (sequência de frames ao fundo do site)
 
 - **Onde ficam os frames:** a pasta `frames/` precisa estar **na mesma pasta do `index.html`**.
-  Os nomes seguem o padrão `frame_0001.webp` … `frame_0300.webp`, e `frames/mobile/` tem os mesmos nomes.
-- **Desktop (≥ 1100 px):** a animação fica numa coluna **fixa na lateral direita**, com os pets **bem grandes**:
-  a pilha tem o dobro da altura da tela e a rolagem "desce a câmera" do gato (topo da página) até o golden
-  (fim da página), enquanto os frames avançam (0% de rolagem = frame 1, 100% = frame 300).
-  O tamanho é ajustável em `PETINO.frames.zoom` no `script.js` (`2` = duas telas de altura).
-- **Celular/tablet:** aparece uma mini janela flutuante à direita depois do topo da página.
-  Ela usa os frames leves de `frames/mobile/` e pode ser fechada no ×.
+  Os nomes seguem o padrão `frame_0001.webp` … `frame_0300.webp`, iguais nas três subpastas.
+- **Ao fundo:** os pets ficam numa camada fixa **atrás de todo o conteúdo**. Os cards e formulários passam na frente,
+  e uma névoa na cor do fundo os integra à página: mais forte do lado do texto e suave nas bordas.
+- **Sombra de contorno:** um contorno fino com sombra projetada dá profundidade (`--pets-shadow` no `styles.css`,
+  com versões próprias para o tema marinho e o claro).
+- **Pets grandes, vistos rolando:** a pilha tem ~2 alturas de tela e a rolagem "desce a câmera" do gato
+  (topo da página) até o golden (fim da página), enquanto os frames avançam (0% = frame 1, 100% = frame 300).
+  Ajustes no `script.js`: `zoom` (tamanho), `anchorX` (posição horizontal).
+- **4K sob demanda:** os frames foram ampliados por IA (Real-ESRGAN) para 4K. Como 300 frames 4K pesariam ~60 MB,
+  o site carrega primeiro uma camada leve (rolagem fluida) e, quando a rolagem desacelera, busca em 4K
+  o frame atual e os vizinhos (`hiWindow`), mantendo no máximo `hiCache` frames 4K na memória.
+  O 4K só é baixado em telas onde ele faz diferença (retina, monitores 2K/4K).
+- **Celular/tablet:** mesmos pets ao fundo, mais discretos, com a camada `mobile/` (e `frames/` como reforço de nitidez).
 - **Pré-carregamento progressivo:** primeiro carrega frames espaçados e depois preenche os intervalos,
-  então a animação já funciona antes de tudo terminar. Uma barrinha verde mostra o progresso.
-- **Canvas responsivo:** fica nítido em telas retina e mantém a proporção do vídeo (9:16, sem distorcer).
+  então a animação já funciona antes de tudo terminar.
+- **Canvas responsivo:** fica nítido em telas retina e mantém a proporção do vídeo (sem distorcer).
 - **`prefers-reduced-motion`:** se o visitante pediu menos movimento, aparece só um frame estático com a pilha inteira
   (os outros 299 nem são baixados) e as bolhas ficam desligadas.
 
-Para trocar o vídeo, gere novos frames com o mesmo padrão de nome e ajuste `PETINO.frames`
-no topo do `script.js` (quantidade, pasta, extensão).
+Para trocar o vídeo, gere novos frames com o mesmo padrão de nome nas três resoluções e ajuste `PETINO.frames`
+no topo do `script.js` (quantidade, pastas, alturas de cada camada).
 
 ```bash
-# exemplo: 300 frames a partir de um vídeo de 10 s
-ffmpeg -i video.mp4 -vf "fps=30,scale=540:-1" -frames:v 300 frames/frame_%04d.webp
+# exemplo simples (sem IA): 300 frames a partir de um vídeo de 10 s
+ffmpeg -i video.mp4 -vf "fps=30,scale=569:-1" -frames:v 300 frames/frame_%04d.webp
 ```
 
-> Os frames atuais tiveram o fundo preto do vídeo removido (com limpeza das bordas) e foram recortados na área dos pets,
-> para eles "flutuarem" sobre o fundo do site. Se trocar por frames sem recorte, ajuste `crop` e `focusX` no `script.js`.
+> Os frames atuais tiveram o fundo preto do vídeo removido (com limpeza das bordas), foram recortados na área dos pets
+> (o recorte de um quadro 4K 2160×3840 é 1707×3570) e ampliados por IA. Se trocar por frames sem recorte, ajuste `focusX`.
 
 ## Bolhas de sabão
 

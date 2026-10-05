@@ -41,7 +41,6 @@
   --font-body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --header-h: 76px;
-  --rail: 0px;                   /* largura da coluna da animação (definida no desktop) */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -210,7 +209,7 @@ p { margin: 0 0 1em; }
   background:
     radial-gradient(900px 480px at 85% 0%, rgba(174, 235, 70, .28), transparent 60%),
     radial-gradient(800px 500px at 0% 100%, rgba(59, 130, 246, .18), transparent 60%),
-    linear-gradient(180deg, var(--sky-100), var(--sky-50));
+    linear-gradient(180deg, rgba(224, 239, 255, .9), rgba(238, 246, 255, 0));
 }
 .hero__grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: 56px; align-items: center; position: relative; z-index: 1; }
 
@@ -279,11 +278,11 @@ p { margin: 0 0 1em; }
 
 /* ---------- Seções ---------- */
 .section { position: relative; padding: clamp(64px, 9vw, 112px) 0; }
-.section--soft { background: var(--sky-50); }
+.section--soft { background: rgba(224, 239, 255, .45); }
 .section--sky {
   background:
-    radial-gradient(700px 380px at 100% 0%, rgba(174, 235, 70, .25), transparent 60%),
-    linear-gradient(180deg, var(--sky-200), var(--sky-100));
+    radial-gradient(700px 380px at 100% 0%, rgba(174, 235, 70, .22), transparent 60%),
+    linear-gradient(180deg, rgba(203, 227, 255, .6), rgba(224, 239, 255, .35));
   overflow: hidden;
 }
 .section__head { text-align: center; max-width: 720px; margin: 0 auto 52px; }
@@ -582,7 +581,7 @@ p { margin: 0 0 1em; }
   background:
     radial-gradient(600px 300px at 10% 0%, rgba(174, 235, 70, .35), transparent 60%),
     radial-gradient(600px 300px at 90% 100%, rgba(59, 130, 246, .25), transparent 60%),
-    var(--sky-200);
+    rgba(203, 227, 255, .55);
   padding: clamp(60px, 8vw, 96px) 0;
 }
 .final-cta__inner { position: relative; z-index: 1; }
@@ -590,7 +589,7 @@ p { margin: 0 0 1em; }
 .final-cta p { color: var(--muted); font-size: 1.12rem; margin-bottom: 28px; }
 
 /* ---------- Rodapé ---------- */
-.footer { background: var(--sky-100); color: var(--muted); padding: 64px 0 0; font-size: .95rem; border-top: 1px solid var(--line); }
+.footer { background: rgba(224, 239, 255, .82); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: var(--muted); padding: 64px 0 0; font-size: .95rem; border-top: 1px solid var(--line); }
 .footer__grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1.3fr; gap: 40px; }
 .footer__logo { height: 64px; width: auto; margin-bottom: 14px; background: var(--navy); border-radius: 14px; padding: 4px 10px; box-shadow: 3px 3px 0 var(--lime); }
 .footer h3 { font-size: 1.05rem; margin-bottom: 14px; }
@@ -622,72 +621,58 @@ p { margin: 0 0 1em; }
 #bubbles { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
 
 /* =========================================================
-   Animação de scroll (sequência de frames)
-   Celular/tablet: mini janela flutuante à direita.
-   Desktop (≥1100px): coluna fixa na lateral direita (abaixo).
+   Animação de scroll (sequência de frames) — AO FUNDO DO SITE
+   O canvas ocupa a tela inteira atrás do conteúdo. Uma "névoa" na cor do fundo
+   integra os pets à página e a sombra de contorno dá profundidade.
    ========================================================= */
+:root {
+  --page: var(--sky-25);
+  --page-rgb: 247, 251, 255;
+  /* sombra de contorno (fina) + sombra projetada (profundidade) */
+  --pets-shadow: drop-shadow(0 0 1.5px rgba(1, 1, 71, .45)) drop-shadow(18px 26px 26px rgba(29, 78, 216, .30));
+  --pets-opacity: .88;
+  --pets-tone: saturate(.95);
+}
 .scroll-anim {
-  position: fixed; z-index: 80;
-  right: 12px; bottom: 84px;
-  width: clamp(110px, 30vw, 190px); aspect-ratio: 9 / 16;
-  border-radius: 22px; overflow: hidden;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .55), rgba(224, 239, 255, .85));
-  border: 2px solid #fff; box-shadow: var(--shadow-lg);
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-  transition: opacity .35s ease, transform .35s ease, visibility .35s;
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  opacity: var(--pets-opacity);
 }
-.scroll-anim.is-hidden { opacity: 0; visibility: hidden; transform: translateY(20px) scale(.96); pointer-events: none; }
-#scroll-canvas { position: absolute; left: 4px; top: 30px; display: block; width: calc(100% - 8px); height: calc(100% - 36px); }
+#scroll-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+  filter: var(--pets-tone) var(--pets-shadow);
+}
+/* Névoa: dissolve os pets na lateral do texto e nas bordas de cima/baixo */
+.scroll-anim::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(var(--page-rgb), .97) 0%, rgba(var(--page-rgb), .88) 38%, rgba(var(--page-rgb), .45) 56%, rgba(var(--page-rgb), .08) 70%, rgba(var(--page-rgb), 0) 80%),
+    linear-gradient(180deg, rgba(var(--page-rgb), .7) 0, rgba(var(--page-rgb), 0) 18%, rgba(var(--page-rgb), 0) 86%, rgba(var(--page-rgb), .6) 100%);
+}
+.scroll-anim.is-static::after { background: linear-gradient(90deg, rgba(var(--page-rgb), .96) 0%, rgba(var(--page-rgb), .6) 45%, rgba(var(--page-rgb), 0) 65%); }
 
-.scroll-anim__loader {
-  position: absolute; left: 14px; right: 14px; bottom: 10px; height: 4px; border-radius: 4px;
-  background: rgba(1, 1, 71, .1); overflow: hidden; transition: opacity .4s ease;
-}
-.scroll-anim__loader span { display: block; height: 100%; background: var(--lime-600); transform-origin: left; transform: scaleX(0); transition: transform .2s linear; }
-.scroll-anim.is-loaded .scroll-anim__loader, .scroll-anim.is-static .scroll-anim__loader { opacity: 0; }
+/* O conteúdo fica na frente dos pets */
+main, .footer { position: relative; z-index: 1; }
 
-.scroll-anim__close {
-  position: absolute; top: 6px; right: 6px; width: 28px; height: 28px; border-radius: 50%;
-  border: 0; background: rgba(1, 1, 71, .75); color: #fff; font-size: 1.1rem; line-height: 1; cursor: pointer;
-  display: grid; place-items: center;
-}
+/* Os pets já são o destaque visual do topo */
+.hero__visual { display: none; }
+.hero__grid { grid-template-columns: 1fr; }
+.hero__content { max-width: 720px; }
 
 @media (min-width: 1100px) {
-  :root { --rail: clamp(360px, 38vw, 660px); }
-
-  .scroll-anim {
-    top: var(--header-h); right: 0; bottom: 0; width: var(--rail); height: auto; aspect-ratio: auto;
-    border: 0; border-radius: 0; box-shadow: none; overflow: visible;
-    background: none; -webkit-backdrop-filter: none; backdrop-filter: none;
-    pointer-events: none;
-  }
-  /* Pets grandes: a pilha passa da altura da tela e a rolagem "desce a câmera" por ela.
-     Bordas suavizadas para o recorte não ficar duro. */
-  .scroll-anim {
-    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 56px), linear-gradient(to bottom, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
-    -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to right, transparent 0, #000 56px), linear-gradient(to bottom, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
-    mask-composite: intersect;
-  }
-  .scroll-anim.is-static { -webkit-mask-image: none; mask-image: none; }
-  #scroll-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .scroll-anim__close { display: none; }
-  .scroll-anim__loader { left: 25%; right: 25%; bottom: 4px; }
-
-  /* O conteúdo deixa espaço para a coluna da animação; os fundos continuam de ponta a ponta */
-  main .container, .footer .container {
-    width: min(1180px, 100% - var(--rail) - 56px);
-    margin-left: max(28px, calc((100% - var(--rail) - 1180px) / 2));
-    margin-right: auto;
-  }
-  main .container--narrow { width: min(820px, 100% - var(--rail) - 56px); margin-left: max(28px, calc((100% - var(--rail) - 820px) / 2)); }
-
-  /* Com os pets na lateral, o hero fica só com o texto */
-  .hero__grid { grid-template-columns: 1fr; }
-  .hero__visual { display: none; }
-  .hero__content { max-width: 720px; }
-
   .cards, .reviews { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* No celular os pets ficam mais discretos para não competir com o texto */
+@media (max-width: 960px) {
+  :root {
+    --pets-opacity: .42;
+    --pets-shadow: drop-shadow(0 0 1px rgba(1, 1, 71, .45)) drop-shadow(8px 14px 14px rgba(29, 78, 216, .28));
+  }
+  .scroll-anim::after {
+    background:
+      linear-gradient(90deg, rgba(var(--page-rgb), .55) 0%, rgba(var(--page-rgb), .3) 50%, rgba(var(--page-rgb), .15) 100%),
+      linear-gradient(180deg, rgba(var(--page-rgb), .6) 0, rgba(var(--page-rgb), 0) 20%, rgba(var(--page-rgb), 0) 85%, rgba(var(--page-rgb), .6) 100%);
+  }
 }
 
 @media (min-width: 1500px) {
@@ -701,11 +686,9 @@ p { margin: 0 0 1em; }
 /* =========================================================
    Responsivo
    ========================================================= */
-@media (max-width: 1360px) and (min-width: 1100px) {
+@media (max-width: 1240px) and (min-width: 961px) {
   .nav { gap: 18px; }
   .nav a:not(.btn) { font-size: .92rem; }
-  .pricing, .package, .split, .booking, .about, .contact { grid-template-columns: 1fr; }
-  .package__visual, .split__visual { max-width: 440px; }
 }
 
 @media (max-width: 1099px) {
@@ -791,6 +774,10 @@ p { margin: 0 0 1em; }
    ========================================================= */
 [data-theme="navy"] {
   color-scheme: dark;
+  --page: #010147;
+  --page-rgb: 1, 1, 71;
+  --pets-shadow: drop-shadow(0 0 2px rgba(0, 0, 0, .7)) drop-shadow(0 0 1px rgba(174, 235, 70, .35)) drop-shadow(20px 28px 28px rgba(0, 0, 20, .65));
+  --pets-tone: brightness(.9) saturate(.92);
   --ink: #e8ecff;
   --muted: #b4bce0;
   --line: rgba(255, 255, 255, .13);
@@ -834,23 +821,22 @@ p { margin: 0 0 1em; }
 [data-theme="navy"] .hero {
   background:
     radial-gradient(900px 480px at 85% 0%, rgba(174, 235, 70, .14), transparent 60%),
-    radial-gradient(800px 500px at 0% 100%, rgba(59, 108, 255, .22), transparent 60%),
-    var(--navy);
+    radial-gradient(800px 500px at 0% 100%, rgba(59, 108, 255, .22), transparent 60%);
 }
-[data-theme="navy"] .section--soft { background: var(--surface-2); }
+[data-theme="navy"] .section--soft { background: rgba(255, 255, 255, .025); }
 [data-theme="navy"] .section--sky {
   background:
     radial-gradient(700px 380px at 100% 0%, rgba(174, 235, 70, .13), transparent 60%),
     radial-gradient(700px 380px at 0% 100%, rgba(59, 108, 255, .2), transparent 60%),
-    #050552;
+    rgba(20, 20, 120, .28);
 }
 [data-theme="navy"] .final-cta {
   background:
     radial-gradient(600px 300px at 10% 0%, rgba(174, 235, 70, .2), transparent 60%),
     radial-gradient(600px 300px at 90% 100%, rgba(59, 108, 255, .25), transparent 60%),
-    #050552;
+    rgba(20, 20, 120, .28);
 }
-[data-theme="navy"] .footer { background: #00002e; border-top-color: rgba(255, 255, 255, .08); }
+[data-theme="navy"] .footer { background: rgba(0, 0, 46, .82); border-top-color: rgba(255, 255, 255, .08); }
 [data-theme="navy"] .footer a:hover { color: var(--lime); }
 
 /* Superfícies (cards, caixas, formulários) */
@@ -909,9 +895,6 @@ p { margin: 0 0 1em; }
 [data-theme="navy"] :focus-visible { outline-color: var(--lime); }
 
 /* Animação de scroll e barras no celular */
-[data-theme="navy"] .scroll-anim { background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(59, 108, 255, .18)); border-color: rgba(174, 235, 70, .6); }
-[data-theme="navy"] .scroll-anim__loader { background: rgba(255, 255, 255, .12); }
-@media (min-width: 1100px) { [data-theme="navy"] .scroll-anim { background: none; } }
 @media (max-width: 960px) {
   [data-theme="navy"] .nav { background: var(--navy); box-shadow: 0 20px 40px rgba(0, 0, 0, .4); }
 }

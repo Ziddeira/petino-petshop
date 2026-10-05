@@ -4,7 +4,7 @@
    2. Links de WhatsApp / mapa / Instagram
    3. Tema do fundo, menu, cabeçalho, animações de entrada, formulário
    4. Bolhas de sabão (rastro no cursor + estouro no clique)
-   5. Animação de scroll com sequência de 300 frames
+   5. Animação de scroll com sequência de 300 frames (ao fundo, 4K sob demanda)
    ========================================================= */
 
 /* ---------- 1. Configuração ---------- */
@@ -17,17 +17,23 @@ const PETINO = {
   // Sequência de frames do vídeo (veja README.md)
   frames: {
     total: 300,
-    desktopPath: "frames/",          // 569×1190 — telas grandes
-    mobilePath: "frames/mobile/",    // 284×595 — celular/tablet
+    // Camadas de resolução (todas recortadas na área dos pets, mesma proporção):
+    tiers: {
+      mobile: { path: "frames/mobile/", height: 891 },   // 426×891  — celular/tablet
+      hd:     { path: "frames/",        height: 1190 },  // 569×1190 — computador (base)
+      uhd:    { path: "frames/4k/",     height: 3570 },  // 1707×3570 — recorte de um quadro 4K (2160×3840)
+    },
+    hiWindow: 6,                     // frames 4K buscados de cada lado do frame atual
+    hiCache: 24,                     // máximo de frames 4K mantidos na memória
     prefix: "frame_",
     digits: 4,
     ext: ".webp",
-    // Área do frame usada no desenho (frações). Os frames já vêm recortados nos pets.
-    crop: { x: 0, y: 0, w: 1, h: 1 },
     focusX: 0.443,                   // centro horizontal da pilha de pets no frame
+    // Posição horizontal da pilha na tela (0 = esquerda, 1 = direita)
+    anchorX: { desktop: 0.8, mobile: 0.68 },
     // Altura da pilha de pets em "telas": 2 = o dobro da altura visível.
     // A rolagem desce pela pilha, do gato (topo) até o golden (base).
-    zoom: { desktop: 2, mobile: 1.5 },
+    zoom: { desktop: 1.9, mobile: 1.5 },
   },
 };
 
@@ -322,7 +328,7 @@ const PETINO = {
     }
   })();
 
-  /* ---------- 5. Animação de scroll (sequência de frames) ---------- */
+  /* ---------- 5. Animação de scroll (sequência de frames ao fundo do site) ---------- */
   (function scrollSequence() {
     const wrap = $(".scroll-anim");
     const canvas = $("#scroll-canvas");
@@ -330,17 +336,26 @@ const PETINO = {
 
     const cfg = PETINO.frames;
     const ctx = canvas.getContext("2d");
-    const railMode = window.matchMedia("(min-width: 1100px)");
-    const base = railMode.matches ? cfg.desktopPath : cfg.mobilePath;
-    const url = (i) => `${base}${cfg.prefix}${String(i + 1).padStart(cfg.digits, "0")}${cfg.ext}`;
+    const wide = window.matchMedia("(min-width: 1100px)");
+    const pad = (i) => String(i + 1).padStart(cfg.digits, "0");
+    const url = (tier, i) => `${tier.path}${cfg.prefix}${pad(i)}${cfg.ext}`;
 
-    const frames = new Array(cfg.total);   // HTMLImageElement quando carregado
-    const loader = $(".scroll-anim__loader span", wrap);
+    // Camada base: carregada inteira, garante a rolagem fluida.
+    // Camada 4K: baixada sob demanda só ao redor do frame atual (quando a rolagem desacelera).
+    const baseTier = wide.matches ? cfg.tiers.hd : cfg.tiers.mobile;
+    const hiTier = wide.matches ? cfg.tiers.uhd : cfg.tiers.hd;
+    const frames = new Array(cfg.total);      // camada base
+    const hi = new Map();                     // camada 4K: índice → imagem decodificada (LRU)
+    const hiLoading = new Set();
+    const hiFailed = new Set();               // não tenta de novo o que falhou
+    let useHi = false;
+
     let loaded = 0;
     let current = 0;          // frame exibido (com suavização)
     let target = 0;           // frame pedido pela rolagem
-    let shown = -1;           // frame realmente desenhado (pode ser o vizinho carregado)
+    let shown = -1;           // frame base realmente desenhado
     let rafId = 0;
+    let idleTimer = 0;
 
     /* Canvas responsivo, nítido em telas retina */
     const resize = () => {
@@ -351,40 +366,47 @@ const PETINO = {
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w;
         canvas.height = h;
-        draw(Math.round(current));
       }
+      // só vale baixar 4K se a pilha for desenhada maior que a camada base
+      const zoom = wide.matches ? cfg.zoom.desktop : cfg.zoom.mobile;
+      useHi = h * zoom > baseTier.height * 1.15;
+      draw(Math.round(current));
+      scheduleHi();
     };
 
-    /* Desenha preservando a proporção. Com zoom, os pets ficam maiores que a área visível
-       e a "câmera" desce pela pilha conforme a rolagem (topo = gato, fim da página = golden). */
+    /* Desenha preservando a proporção. A pilha de pets é maior que a tela e a "câmera"
+       desce por ela conforme a rolagem (topo = gato, fim da página = golden). */
     function draw(index) {
-      // usa o frame carregado mais próximo enquanto os demais ainda chegam
-      let img = frames[index], at = index;
-      for (let d = 1; !img && d < cfg.total; d++) {
-        if (frames[index - d]) { img = frames[index - d]; at = index - d; }
-        else if (frames[index + d]) { img = frames[index + d]; at = index + d; }
+      let img = hi.get(index);
+      if (img) { hi.delete(index); hi.set(index, img); }  // marca como recente (LRU)
+      let at = index;
+      if (!img) {
+        img = frames[index];
+        for (let d = 1; !img && d < cfg.total; d++) {
+          if (frames[index - d]) { img = frames[index - d]; at = index - d; }
+          else if (frames[index + d]) { img = frames[index + d]; at = index + d; }
+        }
       }
       if (!img) return;
+      shown = at;
+
       const cw = canvas.width, ch = canvas.height;
       const iw = img.naturalWidth, ih = img.naturalHeight;
-      const c = cfg.crop;
-      const sx = c.x * iw, sy = c.y * ih, sw = c.w * iw, sh = c.h * ih;
-      let scale, dx, dy;
+      const anchorX = wide.matches ? cfg.anchorX.desktop : cfg.anchorX.mobile;
+      let scale, dy;
       if (wrap.classList.contains("is-static")) {
         // movimento reduzido: pilha inteira visível, sem panorâmica
-        scale = Math.min(cw / sw, ch / sh);
-        dx = (cw - sw * scale) / 2;
-        dy = ch - sh * scale;
+        scale = Math.min((cw * 0.5) / iw, ch / ih);
+        dy = ch - ih * scale;
       } else {
-        const zoom = railMode.matches ? cfg.zoom.desktop : cfg.zoom.mobile;
-        scale = Math.max((ch * zoom) / sh, cw / sw * 0.6);
-        const dh = sh * scale;
-        dx = cw / 2 - (cfg.focusX * iw - sx) * scale;
-        dy = -(current / (cfg.total - 1)) * Math.max(0, dh - ch);
+        const zoom = wide.matches ? cfg.zoom.desktop : cfg.zoom.mobile;
+        scale = (ch * zoom) / ih;
+        dy = -(current / (cfg.total - 1)) * Math.max(0, ih * scale - ch);
       }
+      const dx = cw * anchorX - cfg.focusX * iw * scale;
       ctx.clearRect(0, 0, cw, ch);
-      ctx.drawImage(img, sx, sy, sw, sh, dx, dy, sw * scale, sh * scale);
-      shown = at;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(img, dx, dy, iw * scale, ih * scale);
     }
 
     /* Progresso da rolagem → índice do frame */
@@ -397,7 +419,8 @@ const PETINO = {
       current += (target - current) * 0.14;           // troca suave entre frames
       if (Math.abs(target - current) < 0.05) current = target;
       draw(Math.round(current));                     // redesenha sempre: a panorâmica é contínua
-      rafId = current !== target ? requestAnimationFrame(loop) : 0;
+      if (current !== target) rafId = requestAnimationFrame(loop);
+      else { rafId = 0; scheduleHi(); }
     }
 
     const onScroll = () => {
@@ -405,8 +428,34 @@ const PETINO = {
       if (!rafId) rafId = requestAnimationFrame(loop);
     };
 
-    /* Pré-carregamento progressivo: primeiro frames espaçados, depois preenche os vãos,
-       para que a animação já funcione (com menos fluidez) antes de tudo carregar. */
+    /* 4K sob demanda: quando a rolagem para, busca o frame atual e os vizinhos */
+    function scheduleHi() {
+      if (!useHi) return;
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        const c = Math.round(current);
+        const want = [c];
+        for (let d = 1; d <= cfg.hiWindow; d++) want.push(c + d, c - d);
+        want.filter((i) => i >= 0 && i < cfg.total && !hi.has(i) && !hiLoading.has(i) && !hiFailed.has(i))
+          .slice(0, 6)
+          .forEach((i) => {
+            hiLoading.add(i);
+            const img = new Image();
+            img.src = url(hiTier, i);
+            img.decode().then(() => {
+              hi.set(i, img);
+              while (hi.size > cfg.hiCache) hi.delete(hi.keys().next().value);  // descarta os mais antigos
+              if (i === Math.round(current)) draw(i);
+            }).catch(() => { hiFailed.add(i); }).finally(() => {
+              hiLoading.delete(i);
+              if (!hiLoading.size) scheduleHi();               // continua preenchendo a janela
+            });
+          });
+      }, 140);
+    }
+
+    /* Pré-carregamento progressivo da camada base: primeiro frames espaçados,
+       depois preenche os vãos, para a animação já funcionar antes de tudo carregar. */
     function preload(order) {
       let next = 0;
       const CONCURRENCY = 6;
@@ -418,16 +467,13 @@ const PETINO = {
         img.onload = () => {
           frames[i] = img;
           loaded++;
-          if (loader) loader.style.transform = `scaleX(${loaded / order.length})`;
-          if (loaded === order.length) wrap.classList.add("is-loaded");
+          if (loaded === order.length) { wrap.classList.add("is-loaded"); scheduleHi(); }
           const cur = Math.round(current);
-          if (shown === -1 || Math.abs(i - cur) < Math.abs(shown - cur)) {
-            draw(cur);
-          }
+          if (shown === -1 || Math.abs(i - cur) < Math.abs(shown - cur)) draw(cur);
           loadOne();
         };
         img.onerror = () => { loaded++; loadOne(); };
-        img.src = url(i);
+        img.src = url(baseTier, i);
       };
       for (let k = 0; k < CONCURRENCY; k++) loadOne();
     }
@@ -445,8 +491,8 @@ const PETINO = {
     if (reducedMotion.matches) {
       // Movimento reduzido: um único frame estático, sem animação nem pré-carregamento pesado
       wrap.classList.add("is-static");
-      current = target = 0;   // mesmo frame já pré-carregado no <head>
-      preload([current]);
+      current = target = 0;
+      preload([0]);
       resize();
     } else {
       current = target = progress() * (cfg.total - 1);
@@ -455,25 +501,6 @@ const PETINO = {
       window.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onScroll);
     }
-
-    /* No celular/tablet: mini janela que aparece após o topo e pode ser fechada */
-    const closeBtn = $(".scroll-anim__close", wrap);
-    const hero = $(".hero");
-    let dismissed = false;
-    try { dismissed = sessionStorage.getItem("petino-anim-closed") === "1"; } catch (e) { /* sem storage */ }
-
-    const updateMini = () => {
-      if (railMode.matches) { wrap.classList.remove("is-hidden"); return; }
-      const pastHero = hero ? hero.getBoundingClientRect().bottom < 80 : window.scrollY > 400;
-      wrap.classList.toggle("is-hidden", dismissed || !pastHero);
-    };
-    closeBtn.addEventListener("click", () => {
-      dismissed = true;
-      try { sessionStorage.setItem("petino-anim-closed", "1"); } catch (e) { /* sem storage */ }
-      updateMini();
-    });
-    window.addEventListener("scroll", updateMini, { passive: true });
-    railMode.addEventListener("change", () => { updateMini(); resize(); });
-    updateMini();
+    wide.addEventListener("change", resize);
   })();
 })();
