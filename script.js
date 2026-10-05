@@ -126,6 +126,21 @@ const PETINO = {
     revealEls.forEach((el) => el.classList.add("is-visible"));
   }
 
+  // Foto em tela cheia (versão 4K só é baixada quando o visitante abre)
+  const lightbox = $(".lightbox");
+  if (lightbox && typeof lightbox.showModal === "function") {
+    const lbImg = $(".lightbox__img", lightbox);
+    const closeLb = () => { lightbox.classList.remove("is-zoomed"); lightbox.close(); };
+    $$("[data-zoom]").forEach((btn) => btn.addEventListener("click", () => {
+      if (lbImg.getAttribute("src") !== btn.dataset.zoom) lbImg.src = btn.dataset.zoom;
+      lightbox.showModal();
+    }));
+    lbImg.addEventListener("click", (e) => { e.stopPropagation(); lightbox.classList.toggle("is-zoomed"); });
+    $(".lightbox__close", lightbox).addEventListener("click", closeLb);
+    lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLb(); });
+    lightbox.addEventListener("close", () => lightbox.classList.remove("is-zoomed"));
+  }
+
   // Ano no rodapé
   const ano = $("#ano");
   if (ano) ano.textContent = new Date().getFullYear();

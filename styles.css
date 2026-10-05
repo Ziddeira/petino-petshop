@@ -442,6 +442,40 @@ p { margin: 0 0 1em; }
   transform: rotate(18deg); animation: shine 5s ease-in-out infinite;
 }
 @keyframes shine { 0%, 60% { left: -40%; } 100% { left: 130%; } }
+/* Foto real da fachada dentro da "janela de vidro" */
+.glass-room__window--photo { aspect-ratio: 455 / 486; display: block; width: 100%; padding: 0; cursor: zoom-in; font: inherit; }
+.glass-room__window--photo:hover .glass-room__photo { transform: scale(1.03); }
+.glass-room__photo { transition: transform .5s ease; }
+.glass-room__zoom {
+  position: absolute; top: 14px; right: 14px; z-index: 2; display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 999px; background: rgba(1, 1, 71, .78); color: #fff;
+  font-weight: 800; font-size: .82rem; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+.glass-room__zoom .icon { color: var(--lime); }
+/* Texto à esquerda (lado da névoa) e foto à direita, cobrindo os pets do fundo */
+.split__visual { order: 2; }
+
+/* ---------- Tela cheia (lightbox) ---------- */
+.lightbox {
+  width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
+  background: transparent; overflow: auto; display: none;
+}
+.lightbox[open] { display: grid; place-items: center; }
+.lightbox::backdrop { background: rgba(0, 0, 25, .9); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.lightbox__img { max-width: 94vw; max-height: 88vh; width: auto; height: auto; border-radius: 16px; cursor: zoom-in; box-shadow: 0 30px 80px rgba(0, 0, 0, .5); }
+.lightbox.is-zoomed { place-items: start; }
+.lightbox.is-zoomed .lightbox__img { max-width: none; max-height: none; width: min(3840px, 240vw); border-radius: 0; cursor: zoom-out; }
+.lightbox__close {
+  position: fixed; top: 16px; right: 16px; z-index: 2; width: 46px; height: 46px; border-radius: 50%; border: 0;
+  background: rgba(255, 255, 255, .14); color: #fff; font-size: 1.8rem; line-height: 1; cursor: pointer;
+}
+.lightbox__close:hover { background: var(--lime); color: var(--navy); }
+.lightbox__hint { position: fixed; bottom: 16px; left: 0; right: 0; text-align: center; color: rgba(255, 255, 255, .75); font-size: .88rem; margin: 0; pointer-events: none; }
+.lightbox.is-zoomed .lightbox__hint { display: none; }
+
+.glass-room__window--photo::before { display: none; }
+.glass-room__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.glass-room__window--photo .glass-room__shine { z-index: 1; }
 .glass-room__pet { font-size: clamp(5rem, 12vw, 8rem); filter: drop-shadow(0 12px 20px rgba(29, 78, 216, .25)); animation: bob 4s ease-in-out infinite; }
 .glass-room__bubble {
   position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s); border-radius: 50%;
@@ -719,7 +753,7 @@ main, .footer { position: relative; z-index: 1; }
   .hero__text { margin-inline: auto; }
   .hero__ctas, .hero__bullets { justify-content: center; }
   .hero__visual { max-width: 400px; }
-  .split__visual { order: 2; margin-bottom: 24px; }
+  .split__visual { margin-bottom: 24px; }
   .package__visual { max-width: 420px; margin-inline: auto; width: 100%; padding: 0 8px; }
 
   .trust__grid { grid-template-columns: repeat(2, 1fr); }

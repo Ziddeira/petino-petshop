@@ -12,7 +12,8 @@ petino-petshop/
 │   ├── frame_0001.webp … frame_0300.webp   ← 654×1248 (camada base do computador)
 │   ├── 4k/             ← 1960×3740, 4K nativo do vídeo (baixados sob demanda)
 │   └── mobile/         ← 400×763 (celular e tablet)
-└── assets/img/         ← logo, favicon e imagem de compartilhamento
+└── assets/img/         ← logo, favicon, imagem de compartilhamento e foto da fachada
+    └── fachada-*.webp  ← 800/1200/1920 px (o navegador escolhe) e 3840 px (4K, aberta em tela cheia)
 ```
 
 ## Rodar localmente
@@ -62,6 +63,13 @@ ffmpeg -i video.mp4 -vf "chromakey=0x40FD00:0.25:0.08,despill=green,scale=-1:124
 > transparência pela proporção de verde (ignora a sombra embutida no fundo), separação de cor na espuma translúcida,
 > remoção do reflexo verde e descontaminação das bordas. Depois os frames foram recortados na área dos pets e da espuma
 > (1960×3740 do quadro 4K). Se trocar por frames sem recorte, ajuste `focusX`.
+
+## Foto da fachada (seção "Você acompanha tudo pelo vidro")
+
+A foto enviada (455×486) foi ampliada por IA (Real-ESRGAN) para 4K (3840×4102). O site carrega a versão do tamanho
+certo para cada tela; ao clicar na foto, abre a visualização em tela cheia com a versão 4K, e um novo clique amplia
+para ver os detalhes (Esc ou × fecha). Letreiros pequenos que já eram ilegíveis na foto original não ganham leitura
+com a ampliação: para máxima nitidez, substitua por uma foto original em alta resolução com os mesmos nomes de arquivo.
 
 ## Bolhas de sabão
 
