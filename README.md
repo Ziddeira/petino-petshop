@@ -9,9 +9,9 @@ petino-petshop/
 ├── styles.css          ← todo o visual (temas azul-marinho e azul-claro + verde-limão da marca)
 ├── script.js           ← configuração, interações, bolhas do cursor e animação de scroll
 ├── frames/             ← 300 frames do vídeo, WebP com fundo transparente
-│   ├── frame_0001.webp … frame_0300.webp   ← 569×1190 (camada base do computador)
-│   ├── 4k/             ← 1707×3570, recorte de quadros 4K ampliados por IA (baixados sob demanda)
-│   └── mobile/         ← 426×891 (celular e tablet)
+│   ├── frame_0001.webp … frame_0300.webp   ← 654×1248 (camada base do computador)
+│   ├── 4k/             ← 1960×3740, 4K nativo do vídeo (baixados sob demanda)
+│   └── mobile/         ← 400×763 (celular e tablet)
 └── assets/img/         ← logo, favicon e imagem de compartilhamento
 ```
 
@@ -38,7 +38,7 @@ Para publicar, envie a pasta inteira para qualquer hospedagem estática
 - **Pets grandes, vistos rolando:** a pilha tem ~2 alturas de tela e a rolagem "desce a câmera" do gato
   (topo da página) até o golden (fim da página), enquanto os frames avançam (0% = frame 1, 100% = frame 300).
   Ajustes no `script.js`: `zoom` (tamanho), `anchorX` (posição horizontal).
-- **4K sob demanda:** os frames foram ampliados por IA (Real-ESRGAN) para 4K. Como 300 frames 4K pesariam ~60 MB,
+- **4K sob demanda:** o vídeo original já é 4K (2160×3840, 30 fps, 300 quadros). Como 300 frames 4K pesam bastante,
   o site carrega primeiro uma camada leve (rolagem fluida) e, quando a rolagem desacelera, busca em 4K
   o frame atual e os vizinhos (`hiWindow`), mantendo no máximo `hiCache` frames 4K na memória.
   O 4K só é baixado em telas onde ele faz diferença (retina, monitores 2K/4K).
@@ -53,12 +53,15 @@ Para trocar o vídeo, gere novos frames com o mesmo padrão de nome nas três re
 no topo do `script.js` (quantidade, pastas, alturas de cada camada).
 
 ```bash
-# exemplo simples (sem IA): 300 frames a partir de um vídeo de 10 s
-ffmpeg -i video.mp4 -vf "fps=30,scale=569:-1" -frames:v 300 frames/frame_%04d.webp
+# exemplo simples com o chroma key do próprio ffmpeg (fundo verde → transparente)
+ffmpeg -i video.mp4 -vf "chromakey=0x40FD00:0.25:0.08,despill=green,scale=-1:1248" \
+  -pix_fmt yuva420p -c:v libwebp -frames:v 300 -start_number 1 frames/frame_%04d.webp
 ```
 
-> Os frames atuais tiveram o fundo preto do vídeo removido (com limpeza das bordas), foram recortados na área dos pets
-> (o recorte de um quadro 4K 2160×3840 é 1707×3570) e ampliados por IA. Se trocar por frames sem recorte, ajuste `focusX`.
+> Os frames atuais vêm do vídeo `OVERLAY_TIKTOK.mp4` (fundo verde). O fundo foi removido por chroma key próprio:
+> transparência pela proporção de verde (ignora a sombra embutida no fundo), separação de cor na espuma translúcida,
+> remoção do reflexo verde e descontaminação das bordas. Depois os frames foram recortados na área dos pets e da espuma
+> (1960×3740 do quadro 4K). Se trocar por frames sem recorte, ajuste `focusX`.
 
 ## Bolhas de sabão
 

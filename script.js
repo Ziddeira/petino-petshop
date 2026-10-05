@@ -19,16 +19,16 @@ const PETINO = {
     total: 300,
     // Camadas de resolução (todas recortadas na área dos pets, mesma proporção):
     tiers: {
-      mobile: { path: "frames/mobile/", height: 891 },   // 426×891  — celular/tablet
-      hd:     { path: "frames/",        height: 1190 },  // 569×1190 — computador (base)
-      uhd:    { path: "frames/4k/",     height: 3570 },  // 1707×3570 — recorte de um quadro 4K (2160×3840)
+      mobile: { path: "frames/mobile/", height: 763 },   // 400×763   — celular/tablet
+      hd:     { path: "frames/",        height: 1248 },  // 654×1248  — computador (base)
+      uhd:    { path: "frames/4k/",     height: 3740 },  // 1960×3740 — 4K nativo (recorte do quadro 2160×3840)
     },
     hiWindow: 6,                     // frames 4K buscados de cada lado do frame atual
     hiCache: 24,                     // máximo de frames 4K mantidos na memória
     prefix: "frame_",
     digits: 4,
     ext: ".webp",
-    focusX: 0.443,                   // centro horizontal da pilha de pets no frame
+    focusX: 0.508,                   // centro horizontal da pilha de pets no frame
     // Posição horizontal da pilha na tela (0 = esquerda, 1 = direita)
     anchorX: { desktop: 0.8, mobile: 0.68 },
     // Altura da pilha de pets em "telas": 2 = o dobro da altura visível.
@@ -435,7 +435,8 @@ const PETINO = {
       idleTimer = setTimeout(() => {
         const c = Math.round(current);
         const want = [c];
-        for (let d = 1; d <= cfg.hiWindow; d++) want.push(c + d, c - d);
+        const win = wrap.classList.contains("is-static") ? 0 : cfg.hiWindow;   // imagem parada: só o frame atual
+        for (let d = 1; d <= win; d++) want.push(c + d, c - d);
         want.filter((i) => i >= 0 && i < cfg.total && !hi.has(i) && !hiLoading.has(i) && !hiFailed.has(i))
           .slice(0, 6)
           .forEach((i) => {

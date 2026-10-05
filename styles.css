@@ -852,6 +852,7 @@ main, .footer { position: relative; z-index: 1; }
 [data-theme="navy"] .booking__perks span,
 [data-theme="navy"] .contact__list .icon { background: var(--surface); border-color: var(--line); }
 [data-theme="navy"] .card:hover { border-color: rgba(174, 235, 70, .5); }
+[data-theme="navy"] .trust__item strong, [data-theme="navy"] .float-card strong { color: #fff; }
 [data-theme="navy"] .trust__item .icon,
 [data-theme="navy"] .card__link,
 [data-theme="navy"] .contact__list .icon,
