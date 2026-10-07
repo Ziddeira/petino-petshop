@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="preload" as="image" href="frames/frame_0001.webp" media="(min-width: 1100px)">
+  <link rel="preload" as="image" href="assets/img/pets/golden.webp" imagesrcset="assets/img/pets/golden-sm.webp 399w, assets/img/pets/golden.webp 798w" imagesizes="(min-width: 961px) 320px, 200px">
 
   <script type="application/ld+json">
   {
@@ -105,11 +105,6 @@
     </div>
   </header>
 
-  <!-- Animação de scroll: pets ao fundo do site, atrás do conteúdo -->
-  <div class="scroll-anim" aria-hidden="true">
-    <canvas id="scroll-canvas"></canvas>
-  </div>
-
   <main id="conteudo">
 
     <!-- HERO -->
@@ -155,11 +150,13 @@
           </ul>
         </div>
 
-        <div class="hero__visual reveal" aria-hidden="true">
-          <div class="hero__ring"></div>
-          <div class="hero__blob">
-            <img src="assets/img/logo.png" alt="" width="447" height="447" class="hero__logo">
-          </div>
+        <div class="hero__visual hero__visual--pet reveal">
+          <div class="hero__ring" aria-hidden="true"></div>
+          <div class="hero__blob" aria-hidden="true"></div>
+          <img class="pet-img hero__pet" src="assets/img/pets/golden.webp"
+               srcset="assets/img/pets/golden-sm.webp 399w, assets/img/pets/golden.webp 798w"
+               sizes="(min-width: 961px) 320px, 200px" width="798" height="1678" decoding="async"
+               alt="Golden retriever feliz com touca de banho e espuma">
           <div class="float-card float-card--a">
             <span class="float-card__icon">🛁</span>
             <div><strong>5 banhos por R$190</strong><small>Use em até 12 meses</small></div>
@@ -310,7 +307,11 @@
         </div>
 
         <div class="package__visual reveal">
-          <!-- Cartão-fidelidade ilustrativo do pacote (troque por uma foto se quiser: veja README) -->
+          <img class="pet-img package__pet" src="assets/img/pets/shihtzu.webp"
+               srcset="assets/img/pets/shihtzu-sm.webp 355w, assets/img/pets/shihtzu.webp 711w"
+               sizes="(min-width: 961px) 230px, 170px" width="711" height="1104" loading="lazy" decoding="async"
+               alt="Shih tzu com óculos de natação e espuma de banho">
+          <!-- Cartão-fidelidade ilustrativo do pacote -->
           <div class="punch-card" aria-hidden="true">
             <div class="punch-card__head">
               <img src="assets/img/logo-wide.png" alt="" width="387" height="165" loading="lazy">
@@ -510,7 +511,12 @@
           </div>
         </div>
 
-        <form class="form reveal" id="booking-form" novalidate>
+        <div class="booking__form-wrap reveal">
+          <img class="pet-img booking__pet" src="assets/img/pets/chihuahua.webp"
+               srcset="assets/img/pets/chihuahua-sm.webp 402w, assets/img/pets/chihuahua.webp 804w"
+               sizes="(min-width: 681px) 190px, 150px" width="804" height="1318" loading="lazy" decoding="async"
+               alt="Chihuahua com óculos de natação espiando o formulário">
+        <form class="form" id="booking-form" novalidate>
           <div class="form__row">
             <div class="field">
               <label for="f-tutor">Seu nome</label>
@@ -590,6 +596,7 @@
           </button>
           <p class="form__note">Abre o WhatsApp com a mensagem pronta. É só tocar em enviar.</p>
         </form>
+        </div>
       </div>
     </section>
 
@@ -760,6 +767,10 @@
         <svg class="doodle doodle--heart" style="--x:86%;--y:20%;--r:14deg"><use href="#d-heart"/></svg>
         <svg class="doodle doodle--paw" style="--x:12%;--y:70%;--r:-20deg"><use href="#i-paw"/></svg>
       </div>
+      <img class="pet-img final-cta__pet" src="assets/img/pets/gato.webp"
+               srcset="assets/img/pets/gato-sm.webp 267w, assets/img/pets/gato.webp 534w"
+               sizes="(min-width: 681px) 240px, 110px" width="534" height="1191" loading="lazy" decoding="async"
+               alt="Gato rajado com toalha enrolada na cabeça">
       <div class="container final-cta__inner reveal">
         <h2 class="art-title art-title--md">
           <span class="art-title__top">Seu pet merece</span>

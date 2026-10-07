@@ -7,18 +7,15 @@ HTML, CSS e JavaScript puros: não precisa de build nem de dependências.
 petino-petshop/
 ├── index.html          ← página
 ├── styles.css          ← todo o visual (temas azul-marinho e azul-claro + verde-limão da marca)
-├── script.js           ← configuração, interações, bolhas do cursor e animação de scroll
-├── frames/             ← 300 frames do vídeo, WebP com fundo transparente
-│   ├── frame_0001.webp … frame_0300.webp   ← 654×1248 (camada base do computador)
-│   ├── 4k/             ← 1960×3740, 4K nativo do vídeo (baixados sob demanda)
-│   └── mobile/         ← 400×763 (celular e tablet)
+├── script.js           ← configuração, interações, bolhas de sabão e visualização da foto
 └── assets/img/         ← logo, favicon, imagem de compartilhamento e foto da fachada
-    └── fachada-*.webp  ← 800/1200/1920 px (o navegador escolhe) e 3840 px (4K, aberta em tela cheia)
+    ├── fachada-*.webp  ← 800/1200/1920 px (o navegador escolhe) e 3840 px (4K, aberta em tela cheia)
+    └── pets/           ← golden, shih tzu, chihuahua e gato com fundo transparente
 ```
 
 ## Rodar localmente
 
-Abra com um servidor local (o canvas e o mapa precisam de `http://`):
+Abra com um servidor local (o mapa precisa de `http://`):
 
 ```bash
 python3 -m http.server 8000
@@ -28,41 +25,20 @@ python3 -m http.server 8000
 Para publicar, envie a pasta inteira para qualquer hospedagem estática
 (GitHub Pages, Netlify, Vercel, Hostinger…).
 
-## Animação de scroll (sequência de frames ao fundo do site)
+## Fotos dos pets
 
-- **Onde ficam os frames:** a pasta `frames/` precisa estar **na mesma pasta do `index.html`**.
-  Os nomes seguem o padrão `frame_0001.webp` … `frame_0300.webp`, iguais nas três subpastas.
-- **Ao fundo:** os pets ficam numa camada fixa **atrás de todo o conteúdo**. Os cards e formulários passam na frente,
-  e uma névoa na cor do fundo os integra à página: mais forte do lado do texto e suave nas bordas.
-- **Sombra de contorno:** um contorno fino com sombra projetada dá profundidade (`--pets-shadow` no `styles.css`,
-  com versões próprias para o tema marinho e o claro).
-- **Pets grandes, vistos rolando:** a pilha tem ~2 alturas de tela e a rolagem "desce a câmera" do gato
-  (topo da página) até o golden (fim da página), enquanto os frames avançam (0% = frame 1, 100% = frame 300).
-  Ajustes no `script.js`: `zoom` (tamanho), `anchorX` (posição horizontal).
-- **4K sob demanda:** o vídeo original já é 4K (2160×3840, 30 fps, 300 quadros). Como 300 frames 4K pesam bastante,
-  o site carrega primeiro uma camada leve (rolagem fluida) e, quando a rolagem desacelera, busca em 4K
-  o frame atual e os vizinhos (`hiWindow`), mantendo no máximo `hiCache` frames 4K na memória.
-  O 4K só é baixado em telas onde ele faz diferença (retina, monitores 2K/4K).
-- **Celular/tablet:** mesmos pets ao fundo, mais discretos, com a camada `mobile/` (e `frames/` como reforço de nitidez).
-- **Pré-carregamento progressivo:** primeiro carrega frames espaçados e depois preenche os intervalos,
-  então a animação já funciona antes de tudo terminar.
-- **Canvas responsivo:** fica nítido em telas retina e mantém a proporção do vídeo (sem distorcer).
-- **`prefers-reduced-motion`:** se o visitante pediu menos movimento, aparece só um frame estático com a pilha inteira
-  (os outros 299 nem são baixados) e as bolhas ficam desligadas.
+As quatro fotos enviadas (fundo verde) tiveram o fundo removido por chroma key, com o verde medido em cada foto,
+separação de cor na espuma translúcida, remoção do reflexo verde e limpeza das bordas. As faixas brancas acima e
+abaixo também foram cortadas. Cada pet tem contorno de sombreamento escuro e sombra projetada (`--pet-shadow`).
 
-Para trocar o vídeo, gere novos frames com o mesmo padrão de nome nas três resoluções e ajuste `PETINO.frames`
-no topo do `script.js` (quantidade, pastas, alturas de cada camada).
+| Pet | Onde aparece | Arquivo |
+|---|---|---|
+| Golden de touca | Topo do site (hero), saindo do círculo | `assets/img/pets/golden.webp` |
+| Shih tzu de óculos | Sentado em cima do cartão do Pacote de Banhos | `assets/img/pets/shihtzu.webp` |
+| Chihuahua de óculos | Espiando por trás do formulário de agendamento | `assets/img/pets/chihuahua.webp` |
+| Gato de toalha | Convite final "Seu pet merece esse carinho" | `assets/img/pets/gato.webp` |
 
-```bash
-# exemplo simples com o chroma key do próprio ffmpeg (fundo verde → transparente)
-ffmpeg -i video.mp4 -vf "chromakey=0x40FD00:0.25:0.08,despill=green,scale=-1:1248" \
-  -pix_fmt yuva420p -c:v libwebp -frames:v 300 -start_number 1 frames/frame_%04d.webp
-```
-
-> Os frames atuais vêm do vídeo `OVERLAY_TIKTOK.mp4` (fundo verde). O fundo foi removido por chroma key próprio:
-> transparência pela proporção de verde (ignora a sombra embutida no fundo), separação de cor na espuma translúcida,
-> remoção do reflexo verde e descontaminação das bordas. Depois os frames foram recortados na área dos pets e da espuma
-> (1960×3740 do quadro 4K). Se trocar por frames sem recorte, ajuste `focusX`.
+Cada uma tem uma versão `-sm` com metade do tamanho; o navegador baixa só a necessária.
 
 ## Foto da fachada (seção "Você acompanha tudo pelo vidro")
 
